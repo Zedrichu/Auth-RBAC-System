@@ -18,8 +18,12 @@ public class Client {
     private static String token;
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-        IAppServer app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
-        connect(app);
+        try {
+            IAppServer app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
+            connect(app);
+        } catch (RemoteException rex) {
+            System.out.println("Server cannot be found. I'm quiting this");
+        }
     }
 
 
