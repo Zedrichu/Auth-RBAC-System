@@ -16,6 +16,7 @@ public class Client {
     private static IPrinterService printerService;
     private static IAuthenticationService authService;
     private static String token;
+    private static boolean authenticated = false;
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         try {
@@ -48,6 +49,8 @@ public class Client {
                     authenticate();
                 }
             }
+
+            if (authenticated) break;
         }
         if (response == ResponseCode.FAIL) {
             System.out.println("Server cannot be contacted. I'm quiting this! ");
@@ -58,8 +61,10 @@ public class Client {
         ResponseCode response = authService.authenticate("client", "password", "token");
         if (response == ResponseCode.OK) {
             System.out.println("I am authenticated");
+            authenticated = true;
         } else {
             System.out.println("I was not authenticated");
+            authenticated = false;
         }
     }
 
