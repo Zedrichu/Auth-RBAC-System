@@ -15,20 +15,30 @@ public class Client {
     private static final int MAX_RETRIES = 3;
     private static IPrinterService printerService;
     private static IAuthenticationService authService;
-    private static String token;
+    private static String token = "token";
 
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    public static void main(String[] args) throws MalformedURLException,
+            NotBoundException {
+
+        IAppServer app;
         try {
-            IAppServer app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
-            connect(app);
+            app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
+            boolean success = connect(app);
+            if (!success) {
+                System.exit(1);
+            }
+
+
         } catch (RemoteException rex) {
             System.out.println("Server cannot be found. I'm quiting this");
+            System.exit(1);
         }
     }
 
 
     // Tries to connect client to server and handles the server response
-    private static void connect(IAppServer app) throws RemoteException, NotBoundException, MalformedURLException {
+    private static boolean connect(IAppServer app) throws RemoteException,
+            NotBoundException, MalformedURLException {
         ResponseCode response = null;
         for (int i=0; i<MAX_RETRIES; i++){
             try {
@@ -40,28 +50,43 @@ public class Client {
 
             switch (response) {
                 case OK -> {
-                    printerService = (IPrinterService) Naming.lookup("rmi://localhost:8035/printer");
-                    return;
+                    printerService = (IPrinterService)
+                                        Naming.lookup("rmi://localhost:8035/printer");
+                    System.out.println("Client was already authenticated!");
+                    return true;
                 }
                 case UNAUTHORIZED -> {
-                    authService = (IAuthenticationService) Naming.lookup("rmi://localhost:8035/authenticator");
+                    authService = (IAuthenticationService)
+                                    Naming.lookup("rmi://localhost:8035/authenticator");
                     authenticate();
+                    try {
+                        response = app.connect("client", token);
+                    } catch (RemoteException rex) {
+                        System.out.println("Server cannot be contacted. I'm quiting this");
+                        break;
+                    }
+                    if (response == ResponseCode.OK) {
+                        return true;
+                    }
                 }
             }
         }
-        if (response == ResponseCode.FAIL) {
-            System.out.println("Server cannot be contacted. I'm quiting this! ");
-        }
+        return false;
     }
 
     private static void authenticate() throws RemoteException {
-        ResponseCode response = authService.authenticate("client", "password", "token");
+        ResponseCode response = authService
+                .authenticate("client", "password", "token");
         if (response == ResponseCode.OK) {
-            System.out.println("I am authenticated");
+            System.out.println("I am authenticated now");
         } else {
             System.out.println("I was not authenticated");
         }
     }
 
-
+    private static final String RESET = "\033[0m";
+    private static final String YELLOW = "\033[0;33m";
+    private static final String PURPLE = "\033[0;35m";  // PURPLE
+    private static final String RED = "\033[0;31m";     // RED
+    private static final String GREEN = "\033[0;32m";   // GREEN
 }
