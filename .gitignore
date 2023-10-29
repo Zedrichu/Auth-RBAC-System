@@ -27,4 +27,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
->>>>>>> 648cea4 (Initial project strucutre)
+
+### Others ###
+data/*.trace.db

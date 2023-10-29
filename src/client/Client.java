@@ -76,8 +76,8 @@ public class Client {
     }
 
     private static void authenticate() throws RemoteException {
-        ResponseCode response = authService
-                .authenticate("client", "password", "token");
+        ResponseCode response = authService.authenticate("user123456", "password", token);
+
         if (response == ResponseCode.OK) {
             System.out.println("I am authenticated now");
         } else {
