@@ -12,6 +12,7 @@ public class AppServer extends UnicastRemoteObject implements IAppServer {
     private static IPrinterService printerService;
     private static IAuthenticationService authenticationService;
     private static Registry registry;
+
     private AppServer() throws RemoteException {
         super();
         printerService = new PrinterServant();
