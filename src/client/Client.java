@@ -70,19 +70,22 @@ public class Client {
                         return true;
                     }
                 }
+                case INVALID_USER -> {
+
+                }
             }
         }
         return false;
     }
 
     private static void authenticate() throws RemoteException {
-        ResponseCode response = authService.authenticate("user123456", "password", token);
-
-        if (response == ResponseCode.OK) {
-            System.out.println("I am authenticated now");
-        } else {
-            System.out.println("I was not authenticated");
-        }
+//        ResponseCode response = authService.authenticate("user123456", "password", token);
+//
+//        if (response == ResponseCode.OK) {
+//            System.out.println("I am authenticated now");
+//        } else {
+//            System.out.println("I was not authenticated");
+//        }
     }
 
     private static User loginCredentials() {
