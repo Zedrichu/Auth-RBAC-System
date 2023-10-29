@@ -1,8 +1,5 @@
 package server;
 
-import client.ITask;
-import util.Cookie;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -12,12 +9,12 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     }
 
     @Override
-    public void print(String filename, String printer, Cookie cookie) throws RemoteException {
+    public void print(String filename, String printer, Token token) throws RemoteException {
         System.out.printf("|> Called print(%s,%s)%n", filename, printer);
     }
 
     @Override
-    public void queue(String printer, Cookie cookie) throws RemoteException {
+    public void queue(String printer, Token token) throws RemoteException {
         System.out.printf("|> Called queue(%s)%n", printer);
     }
 
@@ -41,12 +38,12 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     }
 
     @Override
-    public void readConfig(String parameter, Cookie cookie) throws RemoteException {
+    public void readConfig(String parameter, Token token) throws RemoteException {
         System.out.printf("|> Called readConfig(%s)%n", parameter);
     }
 
     @Override
-    public void setConfig(String parameter, String value, Cookie cookie) throws RemoteException {
+    public void setConfig(String parameter, String value, Token token) throws RemoteException {
         System.out.printf("|> Called setConfig(%s)%n", parameter);
     }
 }
