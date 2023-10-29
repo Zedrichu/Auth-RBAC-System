@@ -2,18 +2,17 @@ package util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-public class Cookie {
-    public UUID sessionToken;
+public class Token {
+    public UUID token;
     public String username;
     public LocalDateTime startTime;
 
-    public Cookie(UUID token, String username) {
-        this.sessionToken = token;
+    public Token(String username) {
+        this.token = UUID.randomUUID();
         this.username = username;
-        this.startTime = LocalDateTime.now();
+        this.startTime = LocalDateTime.now(ZoneOffset.UTC);
     }
 
     @Override
