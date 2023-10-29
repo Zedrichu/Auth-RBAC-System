@@ -24,17 +24,37 @@ public class Client {
         IAppServer app;
         try {
             app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
-            boolean success = connect(app);
-            if (!success) {
-                System.exit(1);
-            }
-
 
         } catch (RemoteException rex) {
             System.out.println("Server cannot be found. I'm quiting this");
             System.exit(1);
         }
+
     }
+
+//    private static void usePrinter(IPrinterService printer) {
+//        LogOperation("print", () -> printer.print("authentication_lab.pdf", "best printer", sessionToken));
+//        LogOperation("queue", () -> printer.queue("printer"));
+//        LogOperation("topQueue", () -> printer.topQueue("printer", 0));
+//        LogOperation("start", () -> printer.start());
+//        LogOperation("stop", () -> printer.stop());
+//        LogOperation("restart", () -> printer.restart());
+//        LogOperation("status", () -> printer.status("printer", ));
+//        LogOperation("readConfig", () -> printer.readConfig("parameter", sessionToken));
+//        LogOperation("setConfig", () -> printer.setConfig("parameter", "value", sessionToken));
+//    }
+//
+//    private static <T> void LogOperation(String operation, Callable<T> op) {
+//        try{
+//            System.out.println("Calling operation: " + operation);
+//            op.call();
+//            SuccessMessage("Operation finished");
+//        } catch(AuthenticationFailedException e) {
+//            FailMessage("Authentication error: " + e.getMessage());
+//        } catch (Exception e) {
+//            FailMessage("An error has occured. Contact your administrator.");
+//        }
+//    }
 
 
     // Tries to connect client to server and handles the server response
