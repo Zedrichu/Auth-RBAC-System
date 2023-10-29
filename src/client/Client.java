@@ -1,11 +1,12 @@
 package client;
 
-import server.AppServer;
 import server.IAppServer;
 import server.IAuthenticationService;
 import server.IPrinterService;
 import util.ResponseCode;
+import server.User;
 
+import java.io.Console;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -82,6 +83,20 @@ public class Client {
         } else {
             System.out.println("I was not authenticated");
         }
+    }
+
+    private static User loginCredentials() {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available.");
+            System.exit(1);
+        }
+
+        System.out.println("Please provide your credentials for authentication:");
+        String username = console.readLine("Username: ");
+        char[] passArray = console.readPassword("Password: ");
+        String password = new String(passArray);
+        return new User(username, password);
     }
 
     private static final String RESET = "\033[0m";

@@ -4,7 +4,6 @@ import util.ResponseCode;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Objects;
 
 class AuthenticationServant extends UnicastRemoteObject implements IAuthenticationService {
     private String user = "client";
