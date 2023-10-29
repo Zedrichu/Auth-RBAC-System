@@ -12,8 +12,6 @@ public class AppServer extends UnicastRemoteObject implements IAppServer {
     private static IPrinterService printerService;
     private static IAuthenticationService authenticationService;
     private static Registry registry;
-    private static boolean logged_in = false;
-
     private AppServer() throws RemoteException {
         super();
         printerService = new PrinterServant();
@@ -26,6 +24,10 @@ public class AppServer extends UnicastRemoteObject implements IAppServer {
     }
 
     public ResponseCode connect(String userID, String token) throws RemoteException{
+        boolean logged_in = false;
+        if (userID.equals("client") && token.equals("token")) {
+            logged_in = true;
+        }
         if (logged_in) {
             registry.rebind("printer", printerService);
             return ResponseCode.OK;

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MariaDB Connector jDBC">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/lib/mariadb-java-client-3.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

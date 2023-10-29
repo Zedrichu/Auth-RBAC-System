@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthenticationServant extends UnicastRemoteObject implements IAuthenticationService {
+class AuthenticationServant extends UnicastRemoteObject implements IAuthenticationService {
     private String user = "client";
     private String password = "password";
     private final String SESSION_TOKEN = "token";
@@ -42,5 +42,11 @@ public class AuthenticationServant extends UnicastRemoteObject implements IAuthe
             return ResponseCode.FAIL;
         }
         return ResponseCode.FAIL;
+//         if (token == null && user.equals(userId) && password.equals(this.password)) {
+//             return ResponseCode.OK;
+//         } else if (token != null && token.equals(this.SESSION_TOKEN)) {
+//             return ResponseCode.OK;
+//         }
+//         return ResponseCode.UNAUTHORIZED;
     }
 }
