@@ -1,4 +1,4 @@
-package server.persistence;
+package server;
 
 import java.sql.*;
 
