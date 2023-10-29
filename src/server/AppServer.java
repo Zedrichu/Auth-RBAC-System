@@ -1,40 +1,28 @@
 package server;
 
-import util.ResponseCode;
-
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
-public class AppServer extends UnicastRemoteObject implements IAppServer {
-    private static IPrinterService printerService;
-    private static IAuthenticationService authenticationService;
+public class AppServer {
+    private static final int REGISTRY_PORT = 8035;
+    private static PrinterServant printer;
+    private static TokenManager tokenManager;
     private static Registry registry;
 
     private AppServer() throws RemoteException {
         super();
-        printerService = new PrinterServant();
-        authenticationService = new AuthenticationServant();
+        System.out.println("Initializing the RMI objects...");
+        printer = new PrinterServant();
+        tokenManager = new TokenManager();
     }
 
     public static void main(String[] args) throws RemoteException {
-        registry = LocateRegistry.createRegistry(8035);
-        registry.rebind("appserver", new AppServer());
-    }
+        System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
+        registry = LocateRegistry.createRegistry(REGISTRY_PORT);
 
-    public ResponseCode connect(String userID, String token) throws RemoteException{
-        boolean logged_in = false;
-        if (userID.equals("client") && token.equals("token")) {
-            logged_in = true;
-        }
-        if (logged_in) {
-            registry.rebind("printer", printerService);
-            return ResponseCode.OK;
-        } else {
-            registry.rebind("authenticator", authenticationService);
-            return ResponseCode.UNAUTHORIZED;
-        }
+        System.out.println("Rebinding TokenProvider and Printer services to RMI route-names.");
+        registry.rebind(tokenManager.routeName, tokenManager);
+        registry.rebind(printer.routeName, printer);
     }
 }

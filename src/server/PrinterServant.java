@@ -1,12 +1,16 @@
 package server;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import util.IPrinterService;
+import util.Token;
 
-public class PrinterServant extends UnicastRemoteObject implements IPrinterService {
+import java.rmi.RemoteException;
+
+public class PrinterServant implements IPrinterService {
     public PrinterServant() throws RemoteException {
         super();
     }
+
+
 
     @Override
     public void print(String filename, String printer, Token token) throws RemoteException {
@@ -19,22 +23,23 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     }
 
     @Override
-    public void topQueue(String printer, int job, Cookie cookie) throws RemoteException {
+    public void topQueue(String printer, int job, Token token) throws RemoteException {
         System.out.printf("|> Called topQueue(%s, %d)%n", printer, job);
     }
 
-    public void start(Cookie cookie) throws RemoteException {
+    public void start(Token token) throws RemoteException {
         System.out.println("|> Printer job started");
     }
 
     @Override
-    public void stop(Cookie cookie) throws RemoteException {
+    public void stop(Token token) throws RemoteException {
         System.out.println("|> Printer job stopped");
     }
 
     @Override
-    public void status(String printer, Cookie cookie) throws RemoteException {
+    public String status(String printer, Token token) throws RemoteException {
         System.out.printf("|> Printer '%s' is active%n", printer);
+        return "|> Printer is active";
     }
 
     @Override
