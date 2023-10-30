@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 public class AppServer {
     private static final int REGISTRY_PORT = 8035;
     private static IPrinterService printer;
-    private static ITokenProvider provider;
     private static TokenManager tokenManager;
     private static Registry registry;
 

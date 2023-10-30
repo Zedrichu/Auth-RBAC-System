@@ -12,7 +12,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class Client {
-    private static final int MAX_RETRIES = 3;
     private static IPrinterService printerService;
     private static ITokenProvider tokenProvider;
     private static Token token = new Token("client");
@@ -25,12 +24,11 @@ public class Client {
                     Naming.lookup("rmi://localhost:8035/printer");
             tokenProvider = (ITokenProvider)
                     Naming.lookup("rmi://localhost:8035/token");
-
+            executeOperation();
         } catch (RemoteException rex) {
             System.out.println("Server cannot be found. I'm quiting this");
             System.exit(1);
         }
-
     }
 
 //    private static void usePrinter(IPrinterService printer) {

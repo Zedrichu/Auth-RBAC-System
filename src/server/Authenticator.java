@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-
+/**
+ * Authenticator class - Handles all authentication for the DBManager
+ */
 class Authenticator {
     private final DBManager dbManager;
 

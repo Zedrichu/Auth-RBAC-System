@@ -1,6 +1,8 @@
 package util;
 
-public class TokenResponse {
+import java.io.Serializable;
+
+public class TokenResponse implements Serializable {
 
     public Token token;
     public ResponseCode responseCode;

@@ -42,6 +42,7 @@ public class DBManager {
         }
     }
 
+    // Todo: Make the statement for insertion more parameterizable
     private void populateDatabase() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("DROP TABLE IF EXISTS USERS"); // Potentially use BLOB instead of VARCHAR BLOB(64)===VARCHAR(128)

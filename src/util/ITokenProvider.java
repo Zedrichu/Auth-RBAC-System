@@ -7,4 +7,6 @@ public interface ITokenProvider extends Remote {
     public static final String routeName = "token";
 
     TokenResponse generateToken(String userId, String userPassword) throws RemoteException;
+
+    TokenResponse generateSingleUse(String userId, String userPassword) throws RemoteException;
 }
