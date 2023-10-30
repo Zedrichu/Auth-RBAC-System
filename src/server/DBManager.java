@@ -1,5 +1,6 @@
 package server;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.Random;
@@ -44,14 +45,14 @@ public class DBManager {
     private void populateDatabase() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("DROP TABLE IF EXISTS USERS"); // Potentially use BLOB instead of VARCHAR BLOB(64)===VARCHAR(128)
-        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID CHAR(10) PRIMARY KEY, PASSHASH VARCHAR(128)), SALT VARCHAR(128)");
+        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID CHAR(10) PRIMARY KEY, PASSHASH VARCHAR(128), SALT VARCHAR(128))");
 
         // Example of how to insert encrypted passwords in DB (SHA-512 with salt)
         byte[] salt = new byte[512];
         RANDOM.nextBytes(salt);
         byte[] hash = CryptoHasher.hashPassword("password".toCharArray(), salt);
 
-        statement.execute("INSERT INTO USERS VALUES('user123456', hash, salt);");
+        // Insert some values for passwords
         statement.close();
     }
 

@@ -6,6 +6,7 @@ import util.Token;
 import util.TokenResponse;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
     private static final int TTL_MINUTES = 60;
     private final HashMap<UUID, Token> activeTokens;
 
-    public TokenManager() throws RemoteException {
+    public TokenManager() throws RemoteException, NoSuchAlgorithmException {
         super();
         authenticator = new Authenticator();
         activeTokens = new HashMap<>();
@@ -41,7 +42,7 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
      * @return
      */
     @Override
-    public boolean validateToken(Token token) {
+    public boolean validateToken(Token token) throws RemoteException {
         if (token == null) return false;
         boolean active = token.startTime.until(LocalDateTime.now(),
                 ChronoUnit.MINUTES) < TTL_MINUTES;
@@ -60,7 +61,13 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
     }
 
     private void clearExpired() {
-        activeTokens.entrySet().removeIf((x) -> !validateToken(x.getValue()));
+        activeTokens.entrySet().removeIf((x) -> {
+            try {
+                return !validateToken(x.getValue());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }

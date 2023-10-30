@@ -2,6 +2,7 @@ package server;
 
 import util.ResponseCode;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 class Authenticator {
     private final DBManager dbManager;
 
-    public Authenticator() {
+    public Authenticator() throws NoSuchAlgorithmException {
         dbManager = DBManager.getInstance();
         dbManager.connect();
     }

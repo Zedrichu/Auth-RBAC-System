@@ -8,5 +8,5 @@ import java.rmi.RemoteException;
 
 // Interface issue token
 public interface ITokenService extends Remote {
-    boolean validateToken(Token token);
+    boolean validateToken(Token token) throws RemoteException;
 }

@@ -1,7 +1,5 @@
 package util;
 
-import util.Token;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
