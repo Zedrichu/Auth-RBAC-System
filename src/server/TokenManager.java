@@ -7,25 +7,26 @@ import util.TokenResponse;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class TokenManager extends UnicastRemoteObject implements ITokenService, ITokenProvider {
 
     private final Authenticator authenticator;
     private static final int TTL_MINUTES = 60;
-    private final List<Token> activeTokens;
+    private final HashMap<UUID, Token> activeTokens;
 
     public TokenManager() throws RemoteException {
         super();
         authenticator = new Authenticator();
-        activeTokens = new ArrayList<>();
+        activeTokens = new HashMap<>();
     }
 
     @Override
-    public TokenResponse authenticate(String userId, String userPassword) {
+    public TokenResponse generateToken(String userId, String userPassword) {
         ResponseCode authResult = authenticator.authenticateUser(userId, userPassword);
         Token token = null;
         if (authResult == ResponseCode.OK) {
@@ -41,9 +42,10 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
      */
     @Override
     public boolean validateToken(Token token) {
+        if (token == null) return false;
         boolean active = token.startTime.until(LocalDateTime.now(),
                 ChronoUnit.MINUTES) < TTL_MINUTES;
-        return active && activeTokens.contains(token);
+        return active && activeTokens.containsKey(token.id);
     }
 
     /**
@@ -53,12 +55,12 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
      */
     private Token issueToken(String userId) {
         Token newToken = new Token(userId);
-        activeTokens.add(newToken);
+        activeTokens.put(newToken.id, newToken);
         return newToken;
     }
 
-    private void clearInactiveTokens() {
-        activeTokens.removeIf( (x) -> !validateToken(x));
+    private void clearExpired() {
+        activeTokens.entrySet().removeIf((x) -> !validateToken(x.getValue()));
     }
 
 }
