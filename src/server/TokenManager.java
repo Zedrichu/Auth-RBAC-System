@@ -37,16 +37,30 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
     }
 
     /**
-     *
+     * Method generates a single use Token
+     * @param userId
+     * @param userPassword
+     * @return Token
+     */
+    @Override
+    public TokenResponse generateSingleUse(String userId, String userPassword) {
+        TokenResponse resp = generateToken(userId, userPassword);
+        System.out.println("HERE BITCH ---------");
+        resp.token.singleUse = true;
+        return resp;
+    }
+
+    /**
      * @param token - Token object to be validated by Manager
      * @return
      */
     @Override
     public boolean validateToken(Token token) throws RemoteException {
         if (token == null) return false;
-        boolean active = token.startTime.until(LocalDateTime.now(),
+        boolean active = token.getStartTime().until(LocalDateTime.now(),
                 ChronoUnit.MINUTES) < TTL_MINUTES;
-        return active && activeTokens.containsKey(token.id);
+        if (token.singleUse) activeTokens.remove(token.getId());
+        return active && activeTokens.containsKey(token.getId());
     }
 
     /**
@@ -56,7 +70,7 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
      */
     private Token issueToken(String userId) {
         Token newToken = new Token(userId);
-        activeTokens.put(newToken.id, newToken);
+        activeTokens.put(newToken.getId(), newToken);
         return newToken;
     }
 

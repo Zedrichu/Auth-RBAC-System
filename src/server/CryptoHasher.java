@@ -9,6 +9,8 @@ public class CryptoHasher {
     private static final int ITERATIONS = 1024;
     private static final int KEY_LENGTH = 512;
 
+    private static final int SALT_LENGTH = 16;
+
     public static byte[] hashPassword(final char[] password, final byte[] salt) {
         try {
             PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);

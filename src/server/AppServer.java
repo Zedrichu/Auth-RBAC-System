@@ -1,8 +1,6 @@
 package server;
 
 import util.IPrinterService;
-import util.ITokenProvider;
-
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,8 +14,8 @@ public class AppServer {
 
     public static void main(String[] args) throws RemoteException, NoSuchAlgorithmException {
         System.out.println("Initializing the RMI objects...");
-        printer = new PrinterServant();
         tokenManager = new TokenManager();
+        printer = new PrinterServant(tokenManager);
 
         System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
         registry = LocateRegistry.createRegistry(REGISTRY_PORT);

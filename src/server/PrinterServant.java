@@ -4,10 +4,16 @@ import util.IPrinterService;
 import util.Token;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class PrinterServant implements IPrinterService {
-    public PrinterServant() throws RemoteException {
+public class PrinterServant extends UnicastRemoteObject implements IPrinterService {
+
+    private TokenManager tokenManager;
+
+    public PrinterServant(TokenManager tokenManager) throws RemoteException {
         super();
+        this.tokenManager = tokenManager;
+
     }
 
 

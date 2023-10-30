@@ -11,6 +11,7 @@ public class DBManager {
     private final String url = "jdbc:h2:file:./data/db_file";
     private final String user = "Group85";
     private final String password = "";
+    private final int SALT_LENGTH = 16;
     private Connection connection;
     private static final Random RANDOM = new SecureRandom();
 
@@ -46,12 +47,25 @@ public class DBManager {
     private void populateDatabase() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("DROP TABLE IF EXISTS USERS"); // Potentially use BLOB instead of VARCHAR BLOB(64)===VARCHAR(128)
-        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID CHAR(10) PRIMARY KEY, PASSHASH VARCHAR(128), SALT VARCHAR(128))");
+        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID CHAR(10) PRIMARY KEY, PASSHASH CHAR(128), SALT CHAR(128))");
+
+        // parameterized
+        String username = "user1234";
+        String password = "password";
 
         // Example of how to insert encrypted passwords in DB (SHA-512 with salt)
-        byte[] salt = new byte[512];
+        byte[] salt = new byte[SALT_LENGTH];
         RANDOM.nextBytes(salt);
-        byte[] hash = CryptoHasher.hashPassword("password".toCharArray(), salt);
+        byte[] hash = CryptoHasher.hashPassword(password.toCharArray(), salt);
+        System.out.println("Length Hash: " + hash.length);
+
+        //Structure: ID, PASSHASH, SALT
+        String insertQuery = "INSERT INTO USERS VALUES(?, ?, ?)";
+        PreparedStatement prepStatement = connection.prepareStatement(insertQuery);
+        prepStatement.setString(1, username);
+        prepStatement.setBytes(2, hash);
+        prepStatement.setBytes(3, salt);
+        prepStatement.execute();
 
         // Insert some values for passwords
         statement.close();
