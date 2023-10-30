@@ -2,7 +2,9 @@ package server;
 
 import util.ResponseCode;
 
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -19,12 +21,16 @@ class Authenticator {
     }
 
     public ResponseCode authenticateUser(String username, String password) {
+        System.out.println(username + password);
         if (!dbManager.isConnected()) dbManager.connect();
 
         ResultSet queryResult;
         try {
-            String query = String.format("SELECT * FROM USERS WHERE ID='%s'", username);
-            queryResult = dbManager.executeQuery(query);
+            String query = "SELECT PASSHASH, SALT FROM USERS WHERE ID = ?";
+            PreparedStatement prepStatement = dbManager.connection.prepareStatement(query);
+            prepStatement.setString(1, username);
+            queryResult = prepStatement.executeQuery();
+
             if (!queryResult.next()) {
                 return ResponseCode.INVALID_USER;
             }

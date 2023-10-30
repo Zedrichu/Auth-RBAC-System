@@ -27,8 +27,8 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
     }
 
     @Override
-    public TokenResponse generateToken(String userId, String userPassword) {
-        ResponseCode authResult = authenticator.authenticateUser(userId, userPassword);
+    public TokenResponse generateToken(String userId, String password) {
+        ResponseCode authResult = authenticator.authenticateUser(userId, password);
         Token token = null;
         if (authResult == ResponseCode.OK) {
             token = issueToken(userId);
@@ -39,15 +39,18 @@ public class TokenManager extends UnicastRemoteObject implements ITokenService, 
     /**
      * Method generates a single use Token
      * @param userId
-     * @param userPassword
+     * @param password
      * @return Token
      */
     @Override
-    public TokenResponse generateSingleUse(String userId, String userPassword) {
-        TokenResponse resp = generateToken(userId, userPassword);
-        System.out.println("HERE BITCH ---------");
-        resp.token.singleUse = true;
-        return resp;
+    public TokenResponse generateSingleUse(String userId, String password) {
+        ResponseCode authResult = authenticator.authenticateUser(userId, password);
+        Token token = null;
+        if (authResult == ResponseCode.OK) {
+            token = issueToken(userId);
+            token.singleUse = true;
+        }
+        return new TokenResponse(authResult, token);
     }
 
     /**
