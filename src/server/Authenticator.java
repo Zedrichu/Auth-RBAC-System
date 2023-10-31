@@ -25,13 +25,8 @@ class Authenticator {
 
         ResultSet queryResult;
         try {
-            //#TODO Refactor into a query method in DB Manager
-            String query = "SELECT PASSHASH, SALT FROM USERS WHERE ID = ?";
-            PreparedStatement prepStatement = dbManager.connection.prepareStatement(query);
-            prepStatement.setString(1, username);
-            queryResult = prepStatement.executeQuery();
-            //--------------------------------------------------
-
+            queryResult = dbManager.queryUserCredentials(username);
+            
             if (!queryResult.next()) {
                 return ResponseCode.INVALID_USER;
             }
