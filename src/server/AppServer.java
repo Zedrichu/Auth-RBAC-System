@@ -1,39 +1,27 @@
 package server;
 
-import util.ResponseCode;
-
-import java.rmi.Remote;
+import util.IPrinterService;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import java.security.NoSuchAlgorithmException;
 
-public class AppServer extends UnicastRemoteObject implements IAppServer {
-    private static IPrinterService printerService;
-    private static IAuthenticationService authenticationService;
+public class AppServer {
+    private static final int REGISTRY_PORT = 8035;
+    private static IPrinterService printer;
+    private static SessionManager sessionManager;
     private static Registry registry;
-    private AppServer() throws RemoteException {
-        super();
-        printerService = new PrinterServant();
-        authenticationService = new AuthenticationServant();
-    }
 
-    public static void main(String[] args) throws RemoteException {
-        registry = LocateRegistry.createRegistry(8035);
-        registry.rebind("appserver", new AppServer());
-    }
+    public static void main(String[] args) throws RemoteException, NoSuchAlgorithmException {
+        System.out.println("Initializing the RMI objects...");
+        sessionManager = new SessionManager();
+        printer = new PrinterServant(sessionManager);
 
-    public ResponseCode connect(String userID, String token) throws RemoteException{
-        boolean logged_in = false;
-        if (userID.equals("client") && token.equals("token")) {
-            logged_in = true;
-        }
-        if (logged_in) {
-            registry.rebind("printer", printerService);
-            return ResponseCode.OK;
-        } else {
-            registry.rebind("authenticator", authenticationService);
-            return ResponseCode.UNAUTHORIZED;
-        }
+        System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
+        registry = LocateRegistry.createRegistry(REGISTRY_PORT);
+
+        System.out.println("Rebinding TokenProvider and Printer services to RMI route-names.");
+        registry.rebind(sessionManager.routeName, sessionManager);
+        registry.rebind(printer.routeName, printer);
     }
 }

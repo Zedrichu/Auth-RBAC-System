@@ -1,5 +1,5 @@
 package util;
 
 public enum ResponseCode {
-    OK, UNAUTHORIZED
+    OK, UNAUTHORIZED, FAIL, INVALID_USER // AUTHORIZE(Token)
 }

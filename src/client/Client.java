@@ -1,102 +1,84 @@
 package client;
 
-import server.IAppServer;
-import server.IAuthenticationService;
-import server.IPrinterService;
-import util.ResponseCode;
+import server.ISessionValidator;
+import util.*;
 import server.User;
 
-import java.io.Console;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Scanner;
 
 public class Client {
-    private static final int MAX_RETRIES = 3;
     private static IPrinterService printerService;
-    private static IAuthenticationService authService;
-    private static String token = "token";
+    private static ISessionProvider tokenProvider;
+    private static Scanner scanner;
 
     public static void main(String[] args) throws MalformedURLException,
             NotBoundException {
-
-        IAppServer app;
+        scanner = new Scanner(System.in);
         try {
-            app = (IAppServer) Naming.lookup("rmi://localhost:8035/appserver");
-            boolean success = connect(app);
-            if (!success) {
-                System.exit(1);
-            }
-
-
+            printerService = (IPrinterService)
+                    Naming.lookup("rmi://localhost:8035/" + IPrinterService.routeName);
+            tokenProvider = (ISessionProvider)
+                    Naming.lookup("rmi://localhost:8035/" + ISessionProvider.routeName);
+            executeOperation();
         } catch (RemoteException rex) {
-            System.out.println("Server cannot be found. I'm quiting this");
+            rex.printStackTrace();
+            System.out.println(RED + "Server cannot be found. I'm quiting this" + RESET);
             System.exit(1);
         }
     }
 
-
-    // Tries to connect client to server and handles the server response
-    private static boolean connect(IAppServer app) throws RemoteException,
-            NotBoundException, MalformedURLException {
-        ResponseCode response = null;
-        for (int i=0; i<MAX_RETRIES; i++){
-            try {
-                response = app.connect("client", token);
-            } catch (RemoteException rex) {
-                System.out.println("Server cannot be contacted. I'm quiting this");
-                break;
-            }
-
-            switch (response) {
-                case OK -> {
-                    printerService = (IPrinterService)
-                                        Naming.lookup("rmi://localhost:8035/printer");
-                    System.out.println("Client was already authenticated!");
-                    return true;
-                }
-                case UNAUTHORIZED -> {
-                    authService = (IAuthenticationService)
-                                    Naming.lookup("rmi://localhost:8035/authenticator");
-                    authenticate();
-                    try {
-                        response = app.connect("client", token);
-                    } catch (RemoteException rex) {
-                        System.out.println("Server cannot be contacted. I'm quiting this");
-                        break;
-                    }
-                    if (response == ResponseCode.OK) {
-                        return true;
-                    }
-                }
-            }
+    public static void executeOperation() {
+        User user = loginCredentials();
+        try {
+            SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
+            handleResponse(response);
+        } catch (RemoteException rex) {
+            System.out.println(RED + "Session could not be provided!" + RESET);
         }
-        return false;
     }
 
-    private static void authenticate() throws RemoteException {
-        ResponseCode response = authService.authenticate("user123456", "password", token);
-
-        if (response == ResponseCode.OK) {
-            System.out.println("I am authenticated now");
-        } else {
-            System.out.println("I was not authenticated");
+    public static void executeSession(){
+        User user = loginCredentials();
+        try {
+            SessionResponse response = tokenProvider.loginSession(user.username, user.password);
+            handleResponse(response);
+        } catch (RemoteException rex) {
+            System.out.println(RED + "Session could not be provided!" + RESET);
         }
+
+    }
+    private static void handleResponse(SessionResponse response){
+        try {
+            ResponseCode rc = response.responseCode;
+            if (rc == ResponseCode.OK) {
+                System.out.println(GREEN + "Session has been provided for single use on printer" + RESET);
+                printerService.start(response.session);
+            } else if (rc == ResponseCode.INVALID_USER){
+                System.out.println(YELLOW + "Non-existent user in the database." + RESET);
+            } else if (rc == ResponseCode.UNAUTHORIZED){ //TODO: later implementation of Acces Control
+                System.out.println(RED + "Unauthorized user or invalid credentials" + RESET);
+            } else {
+                System.out.println(PURPLE + "SERVER-SIDE ERROR: run it's exploding!" + RESET);
+            }
+            printerService.start(response.session);
+        } catch (RemoteException rex) {
+            System.out.println(PURPLE + "Operation failed on printer!" + RESET);
+        }
+
     }
 
     private static User loginCredentials() {
-        Console console = System.console();
-        if (console == null) {
-            System.err.println("No console available.");
-            System.exit(1);
-        }
-
-        System.out.println("Please provide your credentials for authentication:");
-        String username = console.readLine("Username: ");
-        char[] passArray = console.readPassword("Password: ");
-        String password = new String(passArray);
+        System.out.println("Please provide your credentials for authentication");
+        System.out.print("Username:");
+        String username = scanner.next();
+        System.out.print("Password:");
+        String password = scanner.next();
         return new User(username, password);
+
     }
 
     private static final String RESET = "\033[0m";
