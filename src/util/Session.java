@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-public class Token implements Serializable {
+public class Session implements Serializable {
     private UUID id;
     public String username;
     private LocalDateTime startTime;
     public boolean singleUse = false;
 
-    public Token(String username) {
+    public Session(String username) {
         this.id = UUID.randomUUID();
         this.username = username;
         this.startTime = LocalDateTime.now(ZoneOffset.UTC);

@@ -21,15 +21,16 @@ class Authenticator {
     }
 
     public ResponseCode authenticateUser(String username, String password) {
-        System.out.println(username + password);
         if (!dbManager.isConnected()) dbManager.connect();
 
         ResultSet queryResult;
         try {
+            //#TODO Refactor into a query method in DB Manager
             String query = "SELECT PASSHASH, SALT FROM USERS WHERE ID = ?";
             PreparedStatement prepStatement = dbManager.connection.prepareStatement(query);
             prepStatement.setString(1, username);
             queryResult = prepStatement.executeQuery();
+            //--------------------------------------------------
 
             if (!queryResult.next()) {
                 return ResponseCode.INVALID_USER;

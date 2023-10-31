@@ -57,7 +57,6 @@ public class DBManager {
         // Example of how to insert encrypted passwords in DB (SHA-512 with salt)
         byte[] salt = new byte[SALT_LENGTH];
         RANDOM.nextBytes(salt);
-
         byte[] hash = CryptoHasher.hashPassword(password.toCharArray(), salt);
 
         //Structure: ID, PASSHASH, SALT

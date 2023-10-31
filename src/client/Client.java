@@ -1,9 +1,9 @@
 package client;
 
+import server.ISessionValidator;
 import util.*;
 import server.User;
 
-import java.io.Console;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Client {
     private static IPrinterService printerService;
-    private static ITokenProvider tokenProvider;
+    private static ISessionProvider tokenProvider;
     private static Scanner scanner;
 
     public static void main(String[] args) throws MalformedURLException,
@@ -20,9 +20,9 @@ public class Client {
         scanner = new Scanner(System.in);
         try {
             printerService = (IPrinterService)
-                    Naming.lookup("rmi://localhost:8035/printer");
-            tokenProvider = (ITokenProvider)
-                    Naming.lookup("rmi://localhost:8035/token");
+                    Naming.lookup("rmi://localhost:8035/" + IPrinterService.routeName);
+            tokenProvider = (ISessionProvider)
+                    Naming.lookup("rmi://localhost:8035/" + ISessionProvider.routeName);
             executeOperation();
         } catch (RemoteException rex) {
             rex.printStackTrace();
@@ -34,29 +34,29 @@ public class Client {
     public static void executeOperation() {
         User user = loginCredentials();
         try {
-            TokenResponse response = tokenProvider.generateSingleUse(user.username, user.password);
+            SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
             handleResponse(response);
         } catch (RemoteException rex) {
-            System.out.println(RED + "Token could not be provided!" + RESET);
+            System.out.println(RED + "Session could not be provided!" + RESET);
         }
     }
 
     public static void executeSession(){
         User user = loginCredentials();
         try {
-            TokenResponse response = tokenProvider.generateToken(user.username, user.password);
+            SessionResponse response = tokenProvider.loginSession(user.username, user.password);
             handleResponse(response);
         } catch (RemoteException rex) {
-            System.out.println(RED + "Token could not be provided!" + RESET);
+            System.out.println(RED + "Session could not be provided!" + RESET);
         }
 
     }
-    private static void handleResponse(TokenResponse response){
+    private static void handleResponse(SessionResponse response){
         try {
             ResponseCode rc = response.responseCode;
             if (rc == ResponseCode.OK) {
-                System.out.println(GREEN + "Token has been provided for single use on printer" + RESET);
-                printerService.start(response.token);
+                System.out.println(GREEN + "Session has been provided for single use on printer" + RESET);
+                printerService.start(response.session);
             } else if (rc == ResponseCode.INVALID_USER){
                 System.out.println(YELLOW + "Non-existent user in the database." + RESET);
             } else if (rc == ResponseCode.UNAUTHORIZED){ //TODO: later implementation of Acces Control
@@ -64,7 +64,7 @@ public class Client {
             } else {
                 System.out.println(PURPLE + "SERVER-SIDE ERROR: run it's exploding!" + RESET);
             }
-            printerService.start(response.token);
+            printerService.start(response.session);
         } catch (RemoteException rex) {
             System.out.println(PURPLE + "Operation failed on printer!" + RESET);
         }
@@ -72,7 +72,6 @@ public class Client {
     }
 
     private static User loginCredentials() {
-
         System.out.println("Please provide your credentials for authentication");
         System.out.print("Username:");
         String username = scanner.next();

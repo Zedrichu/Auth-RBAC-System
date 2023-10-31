@@ -9,19 +9,19 @@ import java.security.NoSuchAlgorithmException;
 public class AppServer {
     private static final int REGISTRY_PORT = 8035;
     private static IPrinterService printer;
-    private static TokenManager tokenManager;
+    private static SessionManager sessionManager;
     private static Registry registry;
 
     public static void main(String[] args) throws RemoteException, NoSuchAlgorithmException {
         System.out.println("Initializing the RMI objects...");
-        tokenManager = new TokenManager();
-        printer = new PrinterServant(tokenManager);
+        sessionManager = new SessionManager();
+        printer = new PrinterServant(sessionManager);
 
         System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
         registry = LocateRegistry.createRegistry(REGISTRY_PORT);
 
         System.out.println("Rebinding TokenProvider and Printer services to RMI route-names.");
-        registry.rebind(tokenManager.routeName, tokenManager);
+        registry.rebind(sessionManager.routeName, sessionManager);
         registry.rebind(printer.routeName, printer);
     }
 }

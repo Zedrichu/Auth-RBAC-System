@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseManager {
+public class MariaDBManager {
     private Connection connection;
 
     public static void main(String[] args) {
