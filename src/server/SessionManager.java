@@ -59,8 +59,9 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
     public boolean validateSession(Session session) throws RemoteException {
         if (session == null) return false;
         clearExpired();
+        boolean valid = activeTokens.containsKey(session.getId());
         if (session.singleUse) activeTokens.remove(session.getId());
-        return activeTokens.containsKey(session.getId());
+        return valid;
     }
 
     /**
@@ -77,7 +78,7 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
     private void clearExpired() {
         activeTokens.entrySet().removeIf((x) ->
                 x.getValue().getStartTime().until(LocalDateTime.now(),
-                ChronoUnit.MINUTES) < TTL_MINUTES);
+                ChronoUnit.MINUTES) > TTL_MINUTES);
     }
 
 }
