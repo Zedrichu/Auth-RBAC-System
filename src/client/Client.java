@@ -9,6 +9,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class Client {
+    private static final int REGISTRY_PORT = 8035;
+    private static final String REGISTRY_HOST = "localhost";
 
     private static final String RESET = "\033[0m";
     private static final String YELLOW = "\033[0;33m";
@@ -19,8 +21,10 @@ public class Client {
     public static void main(String[] args) throws MalformedURLException, NotBoundException {
         CLIMenu menu;
         try {
-            IPrinterService printerService = (IPrinterService) Naming.lookup("rmi://localhost:8035/" + IPrinterService.routeName);
-            ISessionProvider tokenProvider = (ISessionProvider) Naming.lookup("rmi://localhost:8035/" + ISessionProvider.routeName);
+            IPrinterService printerService = (IPrinterService) Naming.lookup(
+                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + IPrinterService.routeName);
+            ISessionProvider tokenProvider = (ISessionProvider) Naming.lookup(
+                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ISessionProvider.routeName);
             menu = new CLIMenu();
 
             while (true) {
