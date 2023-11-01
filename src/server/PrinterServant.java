@@ -19,14 +19,14 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void print(String filename, String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called print(%s,%s)%n", filename, printer);
+        System.out.printf(session.getId() + "|> Called print(%s,%s)%n", filename, printer);
 
     }
 
     @Override
     public void queue(String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called queue(%s)%n", printer);
+        System.out.printf(session.getId() + "|> Called queue(%s)%n", printer);
     }
 
     @Override
@@ -35,22 +35,31 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
         System.out.printf("|> Called topQueue(%s, %d)%n", printer, job);
     }
 
+    @Override
     public void start(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer job started");
+        System.out.println("|> Printer started");
+    }
+
+    @Override
+    public void restart(Session session) throws RemoteException {
+        if (!sessionManager.validateSession(session)) return;
+        System.out.println("|> Printer restarted");
     }
 
     @Override
     public void stop(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer job stopped");
+        System.out.println(session.getId() + "|> Printer stopped");
     }
 
     @Override
-    public String status(String printer, Session session) throws RemoteException {
-        if (!sessionManager.validateSession(session)) return null;
+    public void status(String printer, Session session) throws RemoteException {
+        if (!sessionManager.validateSession(session)) {
+            System.out.println("Session could not be verified by the server.");
+            return;
+        };
         System.out.printf("|> Printer '%s' is active%n", printer);
-        return "|> Printer is active";
     }
 
     @Override

@@ -11,7 +11,8 @@ public interface IPrinterService extends Remote {
     void topQueue(String printer, int job, Session session) throws RemoteException;
     void start(Session session) throws RemoteException;
     void stop(Session session) throws RemoteException;
-    String status(String printer, Session session) throws RemoteException;
+    void restart(Session session) throws RemoteException;
+    void status(String printer, Session session) throws RemoteException;
     void readConfig(String parameter, Session session) throws RemoteException;
     void setConfig(String parameter, String value, Session session) throws RemoteException;
 
