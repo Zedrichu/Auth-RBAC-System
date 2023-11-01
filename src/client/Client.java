@@ -32,13 +32,66 @@ public class Client {
     }
 
     public static void executeOperation() {
-        User user = loginCredentials();
-        try {
-            SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
-            handleResponse(response);
-        } catch (RemoteException rex) {
-            System.out.println(RED + "Session could not be provided!" + RESET);
+        while (true) {
+            User user = loginCredentials();
+            try {
+                SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
+                if (handleResponse(response)) {
+                    System.out.println("Please choose one of the following operations (enter -1 to exit):");
+                    System.out.println("1: print(filename, printer)");
+                    System.out.println("2: queue(printer)");
+                    System.out.println("3: topQueue(printer, job)");
+                    System.out.println("4: status(printer)");
+                    System.out.println("5: readConfig(parameter)");
+                    System.out.println("6: setConfig(parameter, value)");
+                    System.out.print("Enter your choice number: ");
+                    int choice = scanner.nextInt();
+                    if (choice == -1) break;
+                    switch (choice) {
+                        case 1 -> {
+                            System.out.print("Enter the filename: ");
+                            String filename = scanner.next();
+                            System.out.print("Enter the printer name: ");
+                            String printer = scanner.next();
+                            printerService.print(filename, printer, response.session);
+                        }
+                        case 2 -> {
+                            System.out.print("Enter the printer name: ");
+                            String printer = scanner.next();
+                            printerService.queue(printer, response.session);
+                        }
+                        case 3 -> {
+                            System.out.print("Enter the printer name: ");
+                            String printer = scanner.next();
+                            System.out.print("Enter the job number: ");
+                            int job = scanner.nextInt();
+                            printerService.topQueue(printer, job, response.session);
+                        }
+                        case 4 -> {
+                            System.out.print("Enter the printer name: ");
+                            String printer = scanner.next();
+                            System.out.println(printerService.status(printer, response.session));
+                        }
+                        case 5 -> {
+                            System.out.print("Enter the parameter name: ");
+                            String parameter = scanner.next();
+                            printerService.readConfig(parameter, response.session);
+                        }
+                        case 6 -> {
+                            System.out.print("Enter the parameter name: ");
+                            String parameter = scanner.next();
+                            System.out.print("Enter the value: ");
+                            String value = scanner.next();
+                            printerService.setConfig(parameter, value, response.session);
+                        }
+                    }
+                }
+            } catch (RemoteException rex) {
+                System.out.println(RED + "Session could not be provided!" + RESET);
+                break;
+            }
         }
+
     }
 
     public static void executeSession(){
@@ -51,12 +104,13 @@ public class Client {
         }
 
     }
-    private static void handleResponse(SessionResponse response){
+    private static boolean handleResponse(SessionResponse response){
         try {
             ResponseCode rc = response.responseCode;
             if (rc == ResponseCode.OK) {
                 System.out.println(GREEN + "Session has been provided for single use on printer" + RESET);
                 printerService.start(response.session);
+                return true;
             } else if (rc == ResponseCode.INVALID_USER){
                 System.out.println(YELLOW + "Non-existent user in the database." + RESET);
             } else if (rc == ResponseCode.UNAUTHORIZED){ //TODO: later implementation of Acces Control
@@ -68,14 +122,14 @@ public class Client {
         } catch (RemoteException rex) {
             System.out.println(PURPLE + "Operation failed on printer!" + RESET);
         }
-
+        return false;
     }
 
     private static User loginCredentials() {
         System.out.println("Please provide your credentials for authentication");
-        System.out.print("Username:");
+        System.out.print("Username: ");
         String username = scanner.next();
-        System.out.print("Password:");
+        System.out.print("Password: ");
         String password = scanner.next();
         return new User(username, password);
 
