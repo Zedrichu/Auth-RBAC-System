@@ -36,14 +36,17 @@ public class Client {
             User user = loginCredentials();
             try {
                 SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
+                Session session = response.session;
                 if (handleResponse(response)) {
                     System.out.println("Please choose one of the following operations (enter -1 to exit):");
                     System.out.println("1: print(filename, printer)");
                     System.out.println("2: queue(printer)");
                     System.out.println("3: topQueue(printer, job)");
-                    System.out.println("4: status(printer)");
-                    System.out.println("5: readConfig(parameter)");
-                    System.out.println("6: setConfig(parameter, value)");
+                    System.out.println("4: start()");
+                    System.out.println("5: stop()");
+                    System.out.println("6: status(printer)");
+                    System.out.println("7: readConfig(parameter)");
+                    System.out.println("8: setConfig(parameter, value)");
                     System.out.print("Enter your choice number: ");
                     int choice = scanner.nextInt();
                     if (choice == -1) break;
@@ -53,36 +56,42 @@ public class Client {
                             String filename = scanner.next();
                             System.out.print("Enter the printer name: ");
                             String printer = scanner.next();
-                            printerService.print(filename, printer, response.session);
+                            printerService.print(filename, printer, session);
                         }
                         case 2 -> {
                             System.out.print("Enter the printer name: ");
                             String printer = scanner.next();
-                            printerService.queue(printer, response.session);
+                            printerService.queue(printer, session);
                         }
                         case 3 -> {
                             System.out.print("Enter the printer name: ");
                             String printer = scanner.next();
                             System.out.print("Enter the job number: ");
                             int job = scanner.nextInt();
-                            printerService.topQueue(printer, job, response.session);
+                            printerService.topQueue(printer, job, session);
                         }
                         case 4 -> {
-                            System.out.print("Enter the printer name: ");
-                            String printer = scanner.next();
-                            System.out.println(printerService.status(printer, response.session));
+                            printerService.start(session);
                         }
                         case 5 -> {
-                            System.out.print("Enter the parameter name: ");
-                            String parameter = scanner.next();
-                            printerService.readConfig(parameter, response.session);
+                            printerService.stop(session);
                         }
                         case 6 -> {
+                            System.out.print("Enter the printer name: ");
+                            String printer = scanner.next();
+                            System.out.println(printerService.status(printer, session));
+                        }
+                        case 7 -> {
+                            System.out.print("Enter the parameter name: ");
+                            String parameter = scanner.next();
+                            printerService.readConfig(parameter, session);
+                        }
+                        case 8 -> {
                             System.out.print("Enter the parameter name: ");
                             String parameter = scanner.next();
                             System.out.print("Enter the value: ");
                             String value = scanner.next();
-                            printerService.setConfig(parameter, value, response.session);
+                            printerService.setConfig(parameter, value, session);
                         }
                     }
                 }
