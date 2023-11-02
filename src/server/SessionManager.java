@@ -16,12 +16,12 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
 
     private final Authenticator authenticator;
     private static final int TTL_MINUTES = 60;
-    private final HashMap<UUID, Session> activeTokens;
+    private final HashMap<UUID, Session> activeSessions;
 
     public SessionManager() throws RemoteException, NoSuchAlgorithmException {
         super();
         authenticator = new Authenticator();
-        activeTokens = new HashMap<>();
+        activeSessions = new HashMap<>();
     }
 
     @Override
@@ -59,8 +59,9 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
     public boolean validateSession(Session session) throws RemoteException {
         if (session == null) return false;
         clearExpired();
-        if (session.singleUse) activeTokens.remove(session.getId());
-        return activeTokens.containsKey(session.getId());
+        boolean valid = activeSessions.containsKey(session.getId());
+        if (session.singleUse) activeSessions.remove(session.getId());
+        return valid;
     }
 
     /**
@@ -70,14 +71,14 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
      */
     private Session issueToken(String userId) {
         Session newSession = new Session(userId);
-        activeTokens.put(newSession.getId(), newSession);
+        activeSessions.put(newSession.getId(), newSession);
         return newSession;
     }
 
     private void clearExpired() {
-        activeTokens.entrySet().removeIf((x) ->
+        activeSessions.entrySet().removeIf((x) ->
                 x.getValue().getStartTime().until(LocalDateTime.now(),
-                ChronoUnit.MINUTES) < TTL_MINUTES);
+                ChronoUnit.MINUTES) > TTL_MINUTES);
     }
 
 }

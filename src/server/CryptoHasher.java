@@ -10,8 +10,6 @@ public class CryptoHasher {
     private static final int ITERATIONS = 1024;
     private static final int KEY_LENGTH = 512;
 
-    private static final int SALT_LENGTH = 64;
-
     public static void main(String[] args) {
         assert(hashPassword("test".toCharArray(), "salt".getBytes(StandardCharsets.UTF_8))
                 == hashPassword("test".toCharArray(), "salt".getBytes(StandardCharsets.UTF_8)));

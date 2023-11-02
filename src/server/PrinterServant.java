@@ -35,22 +35,31 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
         System.out.printf("|> Called topQueue(%s, %d)%n", printer, job);
     }
 
+    @Override
     public void start(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer job started");
+        System.out.println("|> Printer started");
+    }
+
+    @Override
+    public void restart(Session session) throws RemoteException {
+        if (!sessionManager.validateSession(session)) return;
+        System.out.println("|> Printer restarted");
     }
 
     @Override
     public void stop(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer job stopped");
+        System.out.println("|> Printer stopped");
     }
 
     @Override
-    public String status(String printer, Session session) throws RemoteException {
-        if (!sessionManager.validateSession(session)) return null;
+    public void status(String printer, Session session) throws RemoteException {
+        if (!sessionManager.validateSession(session)) {
+            System.out.println("Session could not be verified by the server.");
+            return;
+        };
         System.out.printf("|> Printer '%s' is active%n", printer);
-        return "|> Printer is active";
     }
 
     @Override
