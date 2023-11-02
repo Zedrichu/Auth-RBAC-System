@@ -32,6 +32,8 @@ public class Client {
                 boolean useSingleUse = menu.selectSessionMode();
                 SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
                 if (handleResponse(response)) {
+                    System.out.println("Client |" + response.session.username
+                            + "| has access to session id: |"+response.session.getId()+"|");
                     menu.selectOperation(printerService, response.session, useSingleUse);
                 } else {
                     System.out.println(RED + "Session could not be provided!" + RESET);
