@@ -30,11 +30,17 @@ public class Client {
             while (true) {
                 User user = menu.createUser();
                 boolean useSingleUse = menu.selectSessionMode();
-                SessionResponse response = tokenProvider.loginSingleUse(user.username, user.password);
+                SessionResponse response;
+                if (useSingleUse) response = tokenProvider.loginSingleUse(user.username, user.password);
+                else response = tokenProvider.loginSession(user.username, user.password);
+
                 if (handleResponse(response)) {
                     System.out.println(YELLOW + "Client |" + response.session.username
                             + "| has access to session id: |" + response.session.getId() + "|" + RESET);
-                    menu.selectOperation(printerService, response.session, useSingleUse);
+                    // Returns false if user exited
+                    if (!menu.selectOperation(printerService, response.session, useSingleUse)) {
+                        break;
+                    }
                 } else {
                     System.out.println(RED + "Session could not be provided!" + RESET);
                 }

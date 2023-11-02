@@ -29,9 +29,9 @@ public class CLIMenu {
         return sessionMode == 1;
     }
 
-    public void selectOperation(IPrinterService printerService, Session session, boolean singleUse) throws RemoteException {
+    public boolean selectOperation(IPrinterService printerService, Session session, boolean singleUse) throws RemoteException {
         do {
-            System.out.println("Please choose one of the following operations"); // (enter -1 to exit):");
+            System.out.println("Please choose one of the following operations (enter -1 to exit)");
             System.out.println("1: print(filename, printer)");
             System.out.println("2: queue(printer)");
             System.out.println("3: topQueue(printer, job)");
@@ -43,7 +43,7 @@ public class CLIMenu {
             System.out.println("9: setConfig(parameter, value)");
             System.out.print("Enter your choice number: ");
             int choice = scanner.nextInt();
-            if (choice == -1) break;
+            if (choice == -1) return false;
             switch (choice) {
                 case 1 -> {
                     System.out.print("Enter the filename: ");
@@ -93,7 +93,7 @@ public class CLIMenu {
                 }
             }
         } while (!singleUse);
-
+        return true;
     }
 
 }

@@ -19,14 +19,14 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void print(String filename, String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf(session.getId() + "|> Called print(%s,%s)%n", filename, printer);
+        System.out.printf("|> Called print(%s,%s)%n", filename, printer);
 
     }
 
     @Override
     public void queue(String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf(session.getId() + "|> Called queue(%s)%n", printer);
+        System.out.printf("|> Called queue(%s)%n", printer);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void stop(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println(session.getId() + "|> Printer stopped");
+        System.out.println("|> Printer stopped");
     }
 
     @Override
