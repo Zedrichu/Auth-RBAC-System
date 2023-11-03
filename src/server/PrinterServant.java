@@ -61,14 +61,12 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
 
     @Override
     public void readConfig(String parameter, Session session) throws RemoteException {
-        System.out.println("ayo");
         if (!sessionManager.validateSession(session)) return;
         System.out.printf("|> %s called readConfig(%s)%n", session.username, parameter);
     }
 
     @Override
     public void setConfig(String parameter, String value, Session session) throws RemoteException {
-        System.out.println("ayoo");
         if (!sessionManager.validateSession(session)) return;
         System.out.printf("|> %s called setConfig(%s, %s)%n", session.username, parameter, value);
     }

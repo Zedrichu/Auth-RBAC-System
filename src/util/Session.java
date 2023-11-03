@@ -14,7 +14,7 @@ public class Session implements Serializable {
     public Session(String username) {
         this.id = UUID.randomUUID();
         this.username = username;
-        this.startTime = LocalDateTime.now(ZoneOffset.UTC);
+        this.startTime = LocalDateTime.now();
     }
 
     public UUID getId() {
