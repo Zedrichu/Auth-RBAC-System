@@ -1,7 +1,5 @@
 package server;
 
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,11 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class DBManager {
-
-    // TODO: Remove database credentials from source code
-    private final String url = "jdbc:h2:file:./data/db_file";
-    private final String user = "Group85";
-    private final String password = "";
     private final int SALT_LENGTH = 16;
     public Connection connection;
     private static final Random RANDOM = new SecureRandom();
@@ -37,7 +30,8 @@ public class DBManager {
     public void connect() {
         try {
             DriverManager.registerDriver(new org.h2.Driver());
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager
+                    .getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD);
             System.out.println("Connected to the DB!");
             populateDatabase();
             System.out.println("Populated the DB!");

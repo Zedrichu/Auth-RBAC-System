@@ -1,6 +1,8 @@
-package util;
+package client;
 
 import server.User;
+import util.IPrinterService;
+import util.Session;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
