@@ -1,6 +1,7 @@
 package util;
 
 import server.CryptoHasher;
+import server.DBConfig;
 
 import java.security.SecureRandom;
 import java.sql.*;
@@ -12,14 +13,11 @@ import java.util.Random;
 public class Enrollment {
     private static Connection connection;
     public static void main(String[] args) throws SQLException {
-        final String url = "jdbc:h2:file:./data/db_file";
-        final String user = "Group85";
-        final String password = "";
         final int SALT_LENGTH = 16;
         final Random RANDOM = new SecureRandom();
 
         DriverManager.registerDriver(new org.h2.Driver());
-        connection = DriverManager.getConnection(url, user, password);
+        connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD);
         System.out.println("Connected to the DB!");
         Statement statement = connection.createStatement();
         statement.execute("DROP TABLE IF EXISTS USERS"); // Potentially use BLOB instead of VARCHAR BLOB(64)===VARCHAR(128)
