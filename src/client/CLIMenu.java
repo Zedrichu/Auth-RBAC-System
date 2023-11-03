@@ -78,7 +78,6 @@ public class CLIMenu {
                 case 7 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    System.out.println("----------STATUS---------");
                     printerService.status(printer, session);
                 }
                 case 8 -> {

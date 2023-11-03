@@ -19,58 +19,55 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void print(String filename, String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called print(%s,%s)%n", filename, printer);
+        System.out.printf("|> %s called print(%s,%s)%n", session.username, filename, printer);
 
     }
 
     @Override
     public void queue(String printer, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called queue(%s)%n", printer);
+        System.out.printf("|> %s called queue(%s)%n", session.username, printer);
     }
 
     @Override
     public void topQueue(String printer, int job, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called topQueue(%s, %d)%n", printer, job);
+        System.out.printf("|> %s called topQueue(%s, %d)%n", session.username, printer, job);
     }
 
     @Override
     public void start(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer started");
+        System.out.printf("|> %s started printer%n", session.username);
     }
 
     @Override
     public void restart(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer restarted");
+        System.out.printf("|> %s restarted printer%n", session.username);
     }
 
     @Override
     public void stop(Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.println("|> Printer stopped");
+        System.out.printf("|> %s stopped printer%n", session.username);
     }
 
     @Override
     public void status(String printer, Session session) throws RemoteException {
-        if (!sessionManager.validateSession(session)) {
-            System.out.println("Session could not be verified by the server.");
-            return;
-        };
-        System.out.printf("|> Printer '%s' is active%n", printer);
+        if (!sessionManager.validateSession(session)) return;
+        System.out.printf("|> %s called status(%s)%n", session.username, printer);
     }
 
     @Override
     public void readConfig(String parameter, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called readConfig(%s)%n", parameter);
+        System.out.printf("|> %s called readConfig(%s)%n", session.username, parameter);
     }
 
     @Override
     public void setConfig(String parameter, String value, Session session) throws RemoteException {
         if (!sessionManager.validateSession(session)) return;
-        System.out.printf("|> Called setConfig(%s)%n", parameter);
+        System.out.printf("|> %s called setConfig(%s, %s)%n", session.username, parameter, value);
     }
 }
