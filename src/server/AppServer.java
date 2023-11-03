@@ -20,7 +20,7 @@ public class AppServer {
         System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
         registry = LocateRegistry.createRegistry(REGISTRY_PORT);
 
-        System.out.println("Rebinding TokenProvider and Printer services to RMI route-names.");
+        System.out.println("Rebinding SessionProvider and Printer services to RMI route-names.");
         registry.rebind(sessionManager.routeName, sessionManager);
         registry.rebind(printer.routeName, printer);
     }
