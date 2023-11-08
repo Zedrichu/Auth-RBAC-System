@@ -1,0 +1,102 @@
+{
+  "users": [
+    {
+      "username": "Alice",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": true,
+        "start": true,
+        "stop": true,
+        "restart": true,
+        "status": true,
+        "readConfig": true,
+        "setConfig": true
+      }
+    },
+    {
+      "username" : "Bob",
+      "access": {
+        "print": false,
+        "queue": false,
+        "topQueue": false,
+        "start": true,
+        "stop": true,
+        "restart": true,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "username": "Cecilia",
+      "access" : {
+        "print": true,
+        "queue": true,
+        "topQueue": true,
+        "start": false,
+        "stop": false,
+        "restart": true,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "username": "David",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "username": "Erica",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "username": "Fred",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+    }
+    },
+    {
+      "username":"George",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    }
+  ]
+}
