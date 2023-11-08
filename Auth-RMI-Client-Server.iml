@@ -17,5 +17,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="MariaDB Connector jDBC" level="project" />
+    <orderEntry type="library" name="JSONSimple" level="project" />
   </component>
 </module>
