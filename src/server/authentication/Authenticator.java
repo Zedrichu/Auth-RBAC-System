@@ -1,10 +1,9 @@
-package server;
+package server.authentication;
 
+import server.DBManager;
 import util.ResponseCode;
 
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 /**
  * Authenticator class - Handles all authentication for the DBManager
  */
-class Authenticator {
+public class Authenticator {
     private final DBManager dbManager;
 
     public Authenticator() throws NoSuchAlgorithmException {

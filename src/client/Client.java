@@ -1,7 +1,6 @@
 package client;
 
 import util.*;
-import server.User;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

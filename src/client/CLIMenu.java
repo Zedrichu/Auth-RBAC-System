@@ -1,6 +1,5 @@
 package client;
 
-import server.User;
 import util.IPrinterService;
 import util.Session;
 
@@ -53,6 +52,7 @@ public class CLIMenu {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
                     printerService.print(filename, printer, session);
+
                 }
                 case 2 -> {
                     System.out.print("Enter the printer name: ");
@@ -93,8 +93,11 @@ public class CLIMenu {
                     printerService.setConfig(parameter, value, session);
                 }
             }
+            
         } while (!singleUse);
         return true;
     }
 
+    //color coded status messages for user actions
+    private static void Success(String msg) {System.out.println("\033[0;32m" + msg + "\033[0m");}
 }

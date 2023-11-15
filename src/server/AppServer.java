@@ -1,5 +1,8 @@
 package server;
 
+import server.aclist.AccessControlUser;
+import server.printer.PrinterServant;
+import server.session.SessionManager;
 import util.IPrinterService;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -10,12 +13,14 @@ public class AppServer {
     private static final int REGISTRY_PORT = 8035;
     private static IPrinterService printer;
     private static SessionManager sessionManager;
+    private static AccessManager accessManager;
     private static Registry registry;
 
     public static void main(String[] args) throws RemoteException, NoSuchAlgorithmException {
         System.out.println("Initializing the RMI objects...");
         sessionManager = new SessionManager();
-        printer = new PrinterServant(sessionManager);
+        accessManager = new AccessManager();
+        printer = new PrinterServant(sessionManager, accessManager);
 
         System.out.println("Creating RMI registry on port " + REGISTRY_PORT);
         registry = LocateRegistry.createRegistry(REGISTRY_PORT);
@@ -23,5 +28,8 @@ public class AppServer {
         System.out.println("Rebinding SessionProvider and Printer services to RMI route-names.");
         registry.rebind(sessionManager.routeName, sessionManager);
         registry.rebind(printer.routeName, printer);
+
+        System.out.println("Inserting the Access Control Users...");
+        AccessManager accessManager = new AccessManager();
     }
 }

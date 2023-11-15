@@ -1,4 +1,4 @@
-package server;
+package server.authentication;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

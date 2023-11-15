@@ -1,6 +1,6 @@
 package util;
 
-import server.CryptoHasher;
+import server.authentication.CryptoHasher;
 import server.DBConfig;
 
 import java.security.SecureRandom;
@@ -20,12 +20,12 @@ public class Enrollment {
         connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD);
         System.out.println("Connected to the DB!");
         Statement statement = connection.createStatement();
-        statement.execute("DROP TABLE IF EXISTS USERS"); // Potentially use BLOB instead of VARCHAR BLOB(64)===VARCHAR(128)
-        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID CHAR(10) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
+        statement.execute("DROP TABLE IF EXISTS USERS");
+        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID VARCHAR(10) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
         statement.close();
 
-        List<String> usernames = new ArrayList<>(Arrays.asList("adrian", "arthur", "jeppe", "valentin"));
-        List<String> passwords = new ArrayList<>(Arrays.asList("adrianPW", "arthurPW", "jeppePW", "valentinPW"));
+        List<String> usernames = new ArrayList<>(Arrays.asList("master", "Alice","Bob","Cecilia","David","Erica","Fred","George"));
+        List<String> passwords = new ArrayList<>(Arrays.asList("masterPW", "alicePW","bobPW","ceciliaPW","davidPW","ericaPW","fredPW","georgePW"));
 
         for (int i = 0; i < usernames.size(); i++) {
             byte[] salt = new byte[SALT_LENGTH];
@@ -34,7 +34,6 @@ public class Enrollment {
             insertUser(usernames.get(i), hash, salt);
         }
         System.out.println("Populated the DB!");
-
         if (connection != null) connection.close();
 
     }

@@ -1,5 +1,6 @@
-package server;
+package server.session;
 
+import server.authentication.Authenticator;
 import util.ISessionProvider;
 import util.ResponseCode;
 import util.Session;
