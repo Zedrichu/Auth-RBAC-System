@@ -21,7 +21,7 @@ public class Enrollment {
         System.out.println("Connected to the DB!");
         Statement statement = connection.createStatement();
         statement.execute("DROP TABLE IF EXISTS USERS");
-        statement.execute("CREATE TABLE IF NOT EXISTS USERS(ID VARCHAR(10) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
+        statement.execute("CREATE TABLE USERS(ID VARCHAR(256) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
         statement.close();
 
         List<String> usernames = new ArrayList<>(Arrays.asList("master", "Alice","Bob","Cecilia","David","Erica","Fred","George"));
