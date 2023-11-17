@@ -64,10 +64,9 @@ public class DBManager {
     }
 
     public boolean queryUserAccess(String username, Operation operation) throws SQLException {
-        String query = "SELECT ? FROM ACCESS_CONTROL_USERS WHERE USERNAME=?";
+        String query = "SELECT * FROM ACCESS_CONTROL_USERS WHERE USERNAME=?";
         PreparedStatement prepStatement = connection.prepareStatement(query);
-        prepStatement.setString(1, operation.name());
-        prepStatement.setString(2, username);
+        prepStatement.setString(1, username);
         ResultSet result = prepStatement.executeQuery();
         result.next();
         return result.getBoolean(operation.name());

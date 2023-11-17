@@ -53,6 +53,7 @@ public class AccessController {
         }
         // catches potential access control not specified
         catch(SQLException e){
+            e.printStackTrace();
             return false;
         }
     }
