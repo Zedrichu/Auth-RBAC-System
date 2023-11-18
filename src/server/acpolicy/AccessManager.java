@@ -12,7 +12,7 @@ public class AccessManager implements IAccessVerifier {
 
     @Override
     public boolean verifyAccess(String username, Operation operation) {
-        return accessController.verifyAccess(username, operation);
+        return accessController.grantAccess(username, operation);
     }
 
 
