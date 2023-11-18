@@ -64,10 +64,9 @@ public class DBManager {
     }
 
     public boolean queryUserAccess(String username, Operation operation) throws SQLException {
-        String query = "SELECT ? FROM ACCESS_CONTROL_USERS WHERE USERNAME=?";
+        String query = "SELECT * FROM ACCESS_CONTROL_USERS WHERE USERNAME=?";
         PreparedStatement prepStatement = connection.prepareStatement(query);
-        prepStatement.setString(1, operation.name());
-        prepStatement.setString(2, username);
+        prepStatement.setString(1, username);
         ResultSet result = prepStatement.executeQuery();
         result.next();
         return result.getBoolean(operation.name());
@@ -77,4 +76,20 @@ public class DBManager {
         if (connection != null) connection.close();
     }
 
+    public void clearAccessControlUsers() throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute("DROP TABLE IF EXISTS ACCESS_CONTROL_USERS");
+        statement.execute("CREATE TABLE ACCESS_CONTROL_USERS(" +
+                "USERNAME VARCHAR(256) PRIMARY KEY, " +
+                "PRINT BOOLEAN, " +
+                "QUEUE BOOLEAN, " +
+                "TOPQUEUE BOOLEAN, " +
+                "START BOOLEAN, " +
+                "RESTART BOOLEAN, " +
+                "STOP BOOLEAN, " +
+                "STATUS BOOLEAN, " +
+                "READCONFIG BOOLEAN, " +
+                "SETCONFIG BOOLEAN, " +
+                "FOREIGN KEY (USERNAME) REFERENCES USERS(ID))");
+    }
 }

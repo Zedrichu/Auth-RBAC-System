@@ -24,6 +24,7 @@ public class AccessController {
         JSONParser parser = new JSONParser();
         DBManager dbManager = DBManager.getInstance();
         try {
+            dbManager.clearAccessControlUsers();
             Object obj = parser.parse(new FileReader(accessControlFilePath));
             JSONObject jsonObject = (JSONObject)obj;
             JSONArray users = (JSONArray) jsonObject.get("users");
@@ -42,7 +43,7 @@ public class AccessController {
                 accessControlUser.setConfig = (boolean) access.get("setConfig");
                 dbManager.insertAccessControlUser(accessControlUser);
             }
-        } catch(Exception e) {
+        } catch(SQLException | RuntimeException | ParseException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -57,6 +58,7 @@ public class AccessController {
         }
         // catches potential access control not specified
         catch(SQLException e){
+            e.printStackTrace();
             return false;
         }
     }
