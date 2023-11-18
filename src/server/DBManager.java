@@ -1,8 +1,7 @@
 package server;
 
-import server.aclist.AccessControlUser;
+import server.acpolicy.AccessControlUser;
 
-import javax.xml.transform.Result;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.Random;
@@ -54,8 +53,8 @@ public class DBManager {
         prepStatement.setBoolean(3, user.queue);
         prepStatement.setBoolean(4, user.topQueue);
         prepStatement.setBoolean(5, user.start);
-        prepStatement.setBoolean(6, user.stop);
-        prepStatement.setBoolean(7, user.restart);
+        prepStatement.setBoolean(6, user.restart);
+        prepStatement.setBoolean(7, user.stop);
         prepStatement.setBoolean(8, user.status);
         prepStatement.setBoolean(9, user.readConfig);
         prepStatement.setBoolean(10, user.setConfig);
@@ -74,6 +73,10 @@ public class DBManager {
 
     public void disconnect() throws SQLException {
         if (connection != null) connection.close();
+    }
+
+    public void insertUserRoles(String username, String[] roles) throws SQLException {
+        
     }
 
     public void clearAccessControlUsers() throws SQLException {

@@ -1,6 +1,6 @@
 package server;
 
-import server.aclist.AccessControlUser;
+import server.acpolicy.AccessManager;
 import server.printer.PrinterServant;
 import server.session.SessionManager;
 import util.IPrinterService;

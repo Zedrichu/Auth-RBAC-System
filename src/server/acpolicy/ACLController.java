@@ -1,4 +1,4 @@
-package server.aclist;
+package server.acpolicy;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -7,20 +7,19 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import server.DBManager;
 import server.Operation;
-import server.aclist.AccessControlUser;
 import util.InvalidAccessException;
 
-public class AccessController {
+public class ACLController implements IAccessController{
     private final DBManager dbManager;
 
-    public AccessController() {
+    public ACLController() {
         dbManager = DBManager.getInstance();
         dbManager.connect();
         populate();
     }
 
     private void populate() {
-        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/AccessControlJSON.json";
+        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/AccessControlList.json";
         JSONParser parser = new JSONParser();
         DBManager dbManager = DBManager.getInstance();
         try {
@@ -48,7 +47,8 @@ public class AccessController {
         }
     }
 
-    public boolean verifyAccess(String username, Operation operation) throws InvalidAccessException {
+    @Override
+    public boolean grantAccess(String username, Operation operation) throws InvalidAccessException {
         try {
             if (!dbManager.queryUserAccess(username, operation)) {
                 throw new InvalidAccessException(

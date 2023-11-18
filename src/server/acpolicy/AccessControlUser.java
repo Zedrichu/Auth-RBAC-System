@@ -1,4 +1,4 @@
-package server.aclist;
+package server.acpolicy;
 
 public class AccessControlUser {
 

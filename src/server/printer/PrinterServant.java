@@ -1,6 +1,6 @@
 package server.printer;
 
-import server.AccessManager;
+import server.acpolicy.AccessManager;
 import server.Operation;
 import server.session.SessionManager;
 import util.IPrinterService;
@@ -39,7 +39,7 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void topQueue(String printer, int job, Session session) throws RemoteException, InvalidAccessException  {
         if (!sessionManager.validateSession(session)) return;
-        if (!accessManager.verifyAccess(session.username, Operation.TOP_QUEUE)) return;
+        if (!accessManager.verifyAccess(session.username, Operation.TOPQUEUE)) return;
         System.out.printf("|> %s called topQueue(%s, %d)%n", session.username, printer, job);
     }
 
@@ -74,14 +74,14 @@ public class PrinterServant extends UnicastRemoteObject implements IPrinterServi
     @Override
     public void readConfig(String parameter, Session session) throws RemoteException, InvalidAccessException  {
         if (!sessionManager.validateSession(session)) return;
-        if (!accessManager.verifyAccess(session.username, Operation.READ_CONFIG)) return;
+        if (!accessManager.verifyAccess(session.username, Operation.READCONFIG)) return;
         System.out.printf("|> %s called readConfig(%s)%n", session.username, parameter);
     }
 
     @Override
     public void setConfig(String parameter, String value, Session session) throws RemoteException, InvalidAccessException  {
         if (!sessionManager.validateSession(session)) return;
-        if (!accessManager.verifyAccess(session.username, Operation.SET_CONFIG)) return;
+        if (!accessManager.verifyAccess(session.username, Operation.SETCONFIG)) return;
         System.out.printf("|> %s called setConfig(%s, %s)%n", session.username, parameter, value);
     }
 }

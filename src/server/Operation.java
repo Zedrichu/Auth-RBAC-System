@@ -1,7 +1,7 @@
 package server;
 
 public enum Operation {
-    PRINT, QUEUE, TOP_QUEUE,
+    PRINT, QUEUE, TOPQUEUE,
     START, RESTART, STOP,
-    STATUS, READ_CONFIG, SET_CONFIG
+    STATUS, READCONFIG, SETCONFIG
 }

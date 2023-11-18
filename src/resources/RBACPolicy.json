@@ -1,0 +1,117 @@
+{
+  "roles": [
+    {
+      "role": "ADMIN",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": true,
+        "start": true,
+        "stop": true,
+        "restart": true,
+        "status": true,
+        "readConfig": true,
+        "setConfig": true
+      }
+    },
+    {
+      "role": "TECHNICIAN",
+      "access": {
+        "print": false,
+        "queue": false,
+        "topQueue": false,
+        "start": true,
+        "stop": true,
+        "restart": true,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "role": "POWERUSER",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": true,
+        "start": false,
+        "stop": false,
+        "restart": true,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "role": "USER",
+      "access": {
+        "print": true,
+        "queue": true,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    },
+    {
+      "role": "JANITOR",
+      "access": {
+        "print": false,
+        "queue": false,
+        "topQueue": false,
+        "start": false,
+        "stop": false,
+        "restart": false,
+        "status": false,
+        "readConfig": false,
+        "setConfig": false
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "Alice",
+      "roles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "Bob",
+      "roles": [
+        "TECHNICIAN",
+        "JANITOR"
+      ]
+    },
+    {
+      "username": "Cecilia",
+      "roles": [
+        "POWERUSER"
+      ]
+    },
+    {
+      "username": "David",
+      "roles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "Erica",
+      "roles": [
+        "USER"
+      ]
+    }, {
+      "username": "Fred",
+      "roles": [
+        "USER"
+      ]
+    }, {
+      "username": "George",
+      "roles": [
+        "USER"
+      ]
+    }
+  ]
+}

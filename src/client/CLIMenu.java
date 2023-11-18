@@ -38,8 +38,8 @@ public class CLIMenu {
             System.out.println("2: queue(printer)");
             System.out.println("3: topQueue(printer, job)");
             System.out.println("4: start()");
-            System.out.println("5: stop()");
-            System.out.println("6: restart()");
+            System.out.println("5: restart()");
+            System.out.println("6: stop()");
             System.out.println("7: status(printer)");
             System.out.println("8: readConfig(parameter)");
             System.out.println("9: setConfig(parameter, value)");
@@ -94,7 +94,7 @@ public class CLIMenu {
                     printerService.setConfig(parameter, value, session);
                 }
             }
-
+            Success("Printer operation performed successfully!");
         } while (!singleUse);
         return true;
     }
