@@ -36,9 +36,13 @@ public class Client {
                 if (handleResponse(response)) {
                     System.out.println(YELLOW + "Client |" + response.session.username
                             + "| has access to session id: |" + response.session.getId() + "|" + RESET);
-                    // Returns false if user exited
-                    if (!menu.selectOperation(printerService, response.session, useSingleUse)) {
-                        break;
+                    try {
+                        // Returns false if user exited
+                        if (!menu.selectOperation(printerService, response.session, useSingleUse)) {
+                            break;
+                        }
+                    } catch (InvalidAccessException iaex) {
+                        System.out.println(RED + "INVALID ACCESS:" + iaex.getMessage() + RESET);
                     }
                 } else {
                     System.out.println(RED + "Session could not be provided!" + RESET);

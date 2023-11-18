@@ -1,6 +1,7 @@
 package client;
 
 import util.IPrinterService;
+import util.InvalidAccessException;
 import util.Session;
 
 import java.rmi.RemoteException;
@@ -30,7 +31,7 @@ public class CLIMenu {
         return sessionMode == 1;
     }
 
-    public boolean selectOperation(IPrinterService printerService, Session session, boolean singleUse) throws RemoteException {
+    public boolean selectOperation(IPrinterService printerService, Session session, boolean singleUse) throws RemoteException, InvalidAccessException {
         do {
             System.out.println("Please choose one of the following operations (enter -1 to exit)");
             System.out.println("1: print(filename, printer)");
@@ -93,7 +94,7 @@ public class CLIMenu {
                     printerService.setConfig(parameter, value, session);
                 }
             }
-            
+
         } while (!singleUse);
         return true;
     }

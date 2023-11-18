@@ -8,6 +8,7 @@ import org.json.simple.parser.*;
 import server.DBManager;
 import server.Operation;
 import server.aclist.AccessControlUser;
+import util.InvalidAccessException;
 
 public class AccessController {
     private final DBManager dbManager;
@@ -46,9 +47,13 @@ public class AccessController {
         }
     }
 
-    public boolean verifyAccess(String username, Operation operation) {
+    public boolean verifyAccess(String username, Operation operation) throws InvalidAccessException {
         try {
-            return dbManager.queryUserAccess(username, operation);
+            if (!dbManager.queryUserAccess(username, operation)) {
+                throw new InvalidAccessException(
+                        String.format("User %s is not allowed to access operation %s", username, operation));
+            };
+            return true;
         }
         // catches potential access control not specified
         catch(SQLException e){
