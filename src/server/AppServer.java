@@ -29,7 +29,5 @@ public class AppServer {
         registry.rebind(sessionManager.routeName, sessionManager);
         registry.rebind(printer.routeName, printer);
 
-        System.out.println("Inserting the Access Control Users...");
-        AccessManager accessManager = new AccessManager();
     }
 }

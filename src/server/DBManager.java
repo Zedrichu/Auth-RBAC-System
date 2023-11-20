@@ -1,15 +1,13 @@
 package server;
 
+import org.json.simple.JSONObject;
 import server.acpolicy.AccessControlUser;
 
-import java.security.SecureRandom;
 import java.sql.*;
-import java.util.Random;
+import java.util.List;
 
 public class DBManager {
-    private final int SALT_LENGTH = 16;
     public Connection connection;
-    private static final Random RANDOM = new SecureRandom();
 
     private static DBManager dbManager = null;
 
@@ -45,8 +43,8 @@ public class DBManager {
         return prepStatement.executeQuery();
     }
 
-    public void insertAccessControlUser(AccessControlUser user) throws SQLException {
-        String query = "INSERT INTO ACCESS_CONTROL_USERS VALUES(?,?,?,?,?,?,?,?,?,?)";
+    public void insertACLUser(AccessControlUser user) throws SQLException {
+        String query = "INSERT INTO ACL_USERS VALUES(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement prepStatement = connection.prepareStatement(query);
         prepStatement.setString(1, user.username);
         prepStatement.setBoolean(2, user.print);
@@ -59,11 +57,43 @@ public class DBManager {
         prepStatement.setBoolean(9, user.readConfig);
         prepStatement.setBoolean(10, user.setConfig);
         prepStatement.execute();
-
+        prepStatement.close();
     }
 
-    public boolean queryUserAccess(String username, Operation operation) throws SQLException {
-        String query = "SELECT * FROM ACCESS_CONTROL_USERS WHERE USERNAME=?";
+    public void insertRole(JSONObject role) throws SQLException {
+        String query = "INSERT INTO ROLES VALUES(?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement prepStatement = connection.prepareStatement(query);
+
+        String roleName = (String) role.get("role");
+        JSONObject access = (JSONObject) role.get("access");
+        prepStatement.setString(1, roleName);
+        prepStatement.setBoolean(2, (boolean) access.get("print"));
+        prepStatement.setBoolean(3, (boolean) access.get("queue"));
+        prepStatement.setBoolean(4, (boolean) access.get("topQueue"));
+        prepStatement.setBoolean(5, (boolean) access.get("start"));
+        prepStatement.setBoolean(6, (boolean) access.get("restart"));
+        prepStatement.setBoolean(7, (boolean) access.get("stop"));
+        prepStatement.setBoolean(8, (boolean) access.get("status"));
+        prepStatement.setBoolean(9, (boolean) access.get("readConfig"));
+        prepStatement.setBoolean(10, (boolean) access.get("setConfig"));
+        prepStatement.execute();
+        prepStatement.close();
+    }
+
+    public void insertRBACUser(String username, List<String> roles) throws SQLException {
+        String query = "INSERT INTO RBAC_USERS VALUES(?,?)";
+        PreparedStatement prepStatement = connection.prepareStatement(query);
+
+        prepStatement.setString(1, username);
+        for (String role : roles) {
+            prepStatement.setString(2, role);
+            prepStatement.execute();
+        }
+        prepStatement.close();
+    }
+
+    public boolean queryACLUserAccess(String username, Operation operation) throws SQLException {
+        String query = "SELECT * FROM ACL_USERS WHERE USERNAME=?";
         PreparedStatement prepStatement = connection.prepareStatement(query);
         prepStatement.setString(1, username);
         ResultSet result = prepStatement.executeQuery();
@@ -71,18 +101,21 @@ public class DBManager {
         return result.getBoolean(operation.name());
     }
 
-    public void disconnect() throws SQLException {
-        if (connection != null) connection.close();
+    public boolean queryRBACUserAccess(String username, Operation operation) throws SQLException {
+        String query = "SELECT * FROM RBAC_USERS NATURAL JOIN ROLES WHERE USERNAME=?";
+        PreparedStatement prepStatement = connection.prepareStatement(query);
+        prepStatement.setString(1, username);
+        ResultSet result = prepStatement.executeQuery();
+        while (result.next()) {
+            if (result.getBoolean(operation.name())) return true;
+        }
+        return false;
     }
 
-    public void insertUserRoles(String username, String[] roles) throws SQLException {
-        
-    }
-
-    public void clearAccessControlUsers() throws SQLException {
+    public void clearACLUsers() throws SQLException {
         Statement statement = connection.createStatement();
-        statement.execute("DROP TABLE IF EXISTS ACCESS_CONTROL_USERS");
-        statement.execute("CREATE TABLE ACCESS_CONTROL_USERS(" +
+        statement.execute("DROP TABLE IF EXISTS ACL_USERS");
+        statement.execute("CREATE TABLE ACL_USERS(" +
                 "USERNAME VARCHAR(256) PRIMARY KEY, " +
                 "PRINT BOOLEAN, " +
                 "QUEUE BOOLEAN, " +
@@ -94,5 +127,28 @@ public class DBManager {
                 "READCONFIG BOOLEAN, " +
                 "SETCONFIG BOOLEAN, " +
                 "FOREIGN KEY (USERNAME) REFERENCES USERS(ID))");
+    }
+
+    public void clearRBACData() throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute("DROP TABLE IF EXISTS RBAC_USERS");
+        statement.execute("DROP TABLE IF EXISTS ROLES");
+        statement.execute("CREATE TABLE ROLES(" +
+                "ROLE VARCHAR(256) PRIMARY KEY, " +
+                "PRINT BOOLEAN, " +
+                "QUEUE BOOLEAN, " +
+                "TOPQUEUE BOOLEAN, " +
+                "START BOOLEAN, " +
+                "RESTART BOOLEAN, " +
+                "STOP BOOLEAN, " +
+                "STATUS BOOLEAN, " +
+                "READCONFIG BOOLEAN, " +
+                "SETCONFIG BOOLEAN)");
+        statement.execute("CREATE TABLE RBAC_USERS(" +
+                "USERNAME VARCHAR(256), " +
+                "ROLE VARCHAR(256), " +
+                "PRIMARY KEY(USERNAME, ROLE)," +
+                "FOREIGN KEY (USERNAME) REFERENCES USERS(ID)," +
+                "FOREIGN KEY (ROLE) REFERENCES ROLES(ROLE))");
     }
 }

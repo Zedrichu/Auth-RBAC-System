@@ -23,9 +23,10 @@ public class ACLController implements IAccessController{
         JSONParser parser = new JSONParser();
         DBManager dbManager = DBManager.getInstance();
         try {
-            dbManager.clearAccessControlUsers();
             Object obj = parser.parse(new FileReader(accessControlFilePath));
             JSONObject jsonObject = (JSONObject)obj;
+
+            dbManager.clearACLUsers();
             JSONArray users = (JSONArray) jsonObject.get("users");
             for (int i = 0; i < users.size(); i++) {
                 JSONObject user = (JSONObject) users.get(i);
@@ -40,7 +41,7 @@ public class ACLController implements IAccessController{
                 accessControlUser.status = (boolean) access.get("status");
                 accessControlUser.readConfig = (boolean) access.get("readConfig");
                 accessControlUser.setConfig = (boolean) access.get("setConfig");
-                dbManager.insertAccessControlUser(accessControlUser);
+                dbManager.insertACLUser(accessControlUser);
             }
         } catch(SQLException | RuntimeException | ParseException | IOException e) {
             e.printStackTrace();
@@ -50,7 +51,7 @@ public class ACLController implements IAccessController{
     @Override
     public boolean grantAccess(String username, Operation operation) throws InvalidAccessException {
         try {
-            if (!dbManager.queryUserAccess(username, operation)) {
+            if (!dbManager.queryACLUserAccess(username, operation)) {
                 throw new InvalidAccessException(
                         String.format("User %s is not allowed to access operation %s", username, operation));
             };
