@@ -71,10 +71,10 @@ public class CLIMenu {
                     printerService.start(session);
                 }
                 case 5 -> {
-                    printerService.stop(session);
+                    printerService.restart(session);
                 }
                 case 6 -> {
-                    printerService.restart(session);
+                    printerService.stop(session);
                 }
                 case 7 -> {
                     System.out.print("Enter the printer name: ");
