@@ -26,8 +26,8 @@ public class Enrollment {
         statement.execute("CREATE TABLE USERS(ID VARCHAR(256) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
         statement.close();
 
-        List<String> usernames = new ArrayList<>(Arrays.asList("Alice","Ida","Cecilia","David","Erica","Fred","George", "Henrik"));
-        List<String> passwords = new ArrayList<>(Arrays.asList("alicePW","idaPW","ceciliaPW","davidPW","ericaPW","fredPW","georgePW", "henrikPW"));
+        List<String> usernames = new ArrayList<>(Arrays.asList("Alice","Ida","Cecilia","David","Erica","Fred","George", "Henry"));
+        List<String> passwords = new ArrayList<>(Arrays.asList("alicePW","idaPW","ceciliaPW","davidPW","ericaPW","fredPW","georgePW", "henryPW"));
 
         for (int i = 0; i < usernames.size(); i++) {
             byte[] salt = new byte[SALT_LENGTH];

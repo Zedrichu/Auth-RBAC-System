@@ -44,7 +44,6 @@ public class RBACController implements IAccessController {
     private void populate(){
         String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/RBACPolicyUpdate.json";
         JSONParser parser = new JSONParser();
-        DBManager dbManager = DBManager.getInstance();
         try {
             Object obj = parser.parse(new FileReader(accessControlFilePath));
             JSONObject jsonObject = (JSONObject) obj;
