@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class Authenticator {
     private final DBManager dbManager;
 
-    public Authenticator() throws NoSuchAlgorithmException {
+    public Authenticator() {
         dbManager = DBManager.getInstance();
         dbManager.connect();
     }

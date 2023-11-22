@@ -15,7 +15,6 @@ public class AccessManager implements IAccessVerifier {
         return accessController.grantAccess(username, operation);
     }
 
-
 }
 
 
