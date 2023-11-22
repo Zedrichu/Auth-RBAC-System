@@ -20,12 +20,14 @@ public class Enrollment {
         connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD);
         System.out.println("Connected to the DB!");
         Statement statement = connection.createStatement();
+        statement.execute("DROP TABLE IF EXISTS RBAC_USERS");
+        statement.execute("DROP TABLE IF EXISTS ACL_USERS");
         statement.execute("DROP TABLE IF EXISTS USERS");
         statement.execute("CREATE TABLE USERS(ID VARCHAR(256) PRIMARY KEY, PASSHASH BLOB(64), SALT BLOB(16))");
         statement.close();
 
-        List<String> usernames = new ArrayList<>(Arrays.asList("master", "Alice","Bob","Cecilia","David","Erica","Fred","George"));
-        List<String> passwords = new ArrayList<>(Arrays.asList("masterPW", "alicePW","bobPW","ceciliaPW","davidPW","ericaPW","fredPW","georgePW"));
+        List<String> usernames = new ArrayList<>(Arrays.asList("Alice","Ida","Cecilia","David","Erica","Fred","George", "Henrik"));
+        List<String> passwords = new ArrayList<>(Arrays.asList("alicePW","idaPW","ceciliaPW","davidPW","ericaPW","fredPW","georgePW", "henrikPW"));
 
         for (int i = 0; i < usernames.size(); i++) {
             byte[] salt = new byte[SALT_LENGTH];

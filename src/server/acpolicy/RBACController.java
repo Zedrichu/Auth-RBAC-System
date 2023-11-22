@@ -42,7 +42,7 @@ public class RBACController implements IAccessController {
     }
 
     private void populate(){
-        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/RBACPolicy.json";
+        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/RBACPolicyUpdate.json";
         JSONParser parser = new JSONParser();
         DBManager dbManager = DBManager.getInstance();
         try {

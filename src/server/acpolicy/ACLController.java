@@ -19,7 +19,7 @@ public class ACLController implements IAccessController{
     }
 
     private void populate() {
-        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/AccessControlList.json";
+        String accessControlFilePath = System.getProperty("user.dir") + "/src/resources/AccessControlListUpdate.json";
         JSONParser parser = new JSONParser();
         DBManager dbManager = DBManager.getInstance();
         try {
