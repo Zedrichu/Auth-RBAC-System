@@ -2,7 +2,7 @@ package client;
 
 import util.IPrinterService;
 import util.InvalidAccessException;
-import util.Session;
+import util.Ticket;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -31,7 +31,7 @@ public class CLIMenu {
         return sessionMode == 1;
     }
 
-    public boolean selectOperation(IPrinterService printerService, Session session, boolean singleUse) throws RemoteException, InvalidAccessException {
+    public boolean selectOperation(IPrinterService printerService, Ticket ticket, boolean singleUse) throws RemoteException, InvalidAccessException {
         do {
             System.out.println("Please choose one of the following operations (enter -1 to exit)");
             System.out.println("1: print(filename, printer)");
@@ -52,46 +52,46 @@ public class CLIMenu {
                     String filename = scanner.next();
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.print(filename, printer, session);
+                    printerService.print(filename, printer, ticket);
 
                 }
                 case 2 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.queue(printer, session);
+                    printerService.queue(printer, ticket);
                 }
                 case 3 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
                     System.out.print("Enter the job number: ");
                     int job = scanner.nextInt();
-                    printerService.topQueue(printer, job, session);
+                    printerService.topQueue(printer, job, ticket);
                 }
                 case 4 -> {
-                    printerService.start(session);
+                    printerService.start(ticket);
                 }
                 case 5 -> {
-                    printerService.restart(session);
+                    printerService.restart(ticket);
                 }
                 case 6 -> {
-                    printerService.stop(session);
+                    printerService.stop(ticket);
                 }
                 case 7 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.status(printer, session);
+                    printerService.status(printer, ticket);
                 }
                 case 8 -> {
                     System.out.print("Enter the parameter name: ");
                     String parameter = scanner.next();
-                    printerService.readConfig(parameter, session);
+                    printerService.readConfig(parameter, ticket);
                 }
                 case 9 -> {
                     System.out.print("Enter the parameter name: ");
                     String parameter = scanner.next();
                     System.out.print("Enter the value: ");
                     String value = scanner.next();
-                    printerService.setConfig(parameter, value, session);
+                    printerService.setConfig(parameter, value, ticket);
                 }
             }
             Success("Printer operation performed successfully!");

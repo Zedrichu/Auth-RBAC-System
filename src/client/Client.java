@@ -22,23 +22,23 @@ public class Client {
         try {
             IPrinterService printerService = (IPrinterService) Naming.lookup(
                     "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + IPrinterService.routeName);
-            ISessionProvider tokenProvider = (ISessionProvider) Naming.lookup(
-                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ISessionProvider.routeName);
+            ITicketProvider tokenProvider = (ITicketProvider) Naming.lookup(
+                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ITicketProvider.routeName);
             menu = new CLIMenu();
 
             while (true) {
                 User user = menu.createUser();
                 boolean useSingleUse = menu.selectSessionMode();
-                SessionResponse response;
+                TicketResponse response;
                 if (useSingleUse) response = tokenProvider.loginSingleUse(user.username, user.password);
                 else response = tokenProvider.loginSession(user.username, user.password);
 
                 if (handleResponse(response)) {
-                    System.out.println(YELLOW + "Client |" + response.session.username
-                            + "| has access to session id: |" + response.session.getId() + "|" + RESET);
+                    System.out.println(YELLOW + "Client |" + response.ticket.username
+                            + "| has access to session id: |" + response.ticket.getId() + "|" + RESET);
                     try {
                         // Returns false if user exited
-                        if (!menu.selectOperation(printerService, response.session, useSingleUse)) {
+                        if (!menu.selectOperation(printerService, response.ticket, useSingleUse)) {
                             break;
                         }
                     } catch (InvalidAccessException iaex) {
@@ -55,7 +55,7 @@ public class Client {
         }
     }
 
-    private static boolean handleResponse(SessionResponse response){
+    private static boolean handleResponse(TicketResponse response){
         ResponseCode rc = response.responseCode;
         if (rc == ResponseCode.OK) {
             System.out.println(GREEN + "Session has been provided for single use on printer" + RESET);

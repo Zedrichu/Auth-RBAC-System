@@ -1,10 +1,10 @@
-package server.session;
+package server.ticket;
 
 import server.authentication.Authenticator;
-import util.ISessionProvider;
+import util.ITicketProvider;
 import util.ResponseCode;
-import util.Session;
-import util.SessionResponse;
+import util.Ticket;
+import util.TicketResponse;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.NoSuchAlgorithmException;
@@ -13,26 +13,26 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class SessionManager extends UnicastRemoteObject implements ISessionValidator, ISessionProvider {
+public class TicketManager extends UnicastRemoteObject implements ITicketValidator, ITicketProvider {
 
     private final Authenticator authenticator;
     private static final int TTL_MINUTES = 60;
-    private final HashMap<UUID, Session> activeSessions;
+    private final HashMap<UUID, Ticket> activeSessions;
 
-    public SessionManager() throws RemoteException, NoSuchAlgorithmException {
+    public TicketManager() throws RemoteException, NoSuchAlgorithmException {
         super();
         authenticator = new Authenticator();
         activeSessions = new HashMap<>();
     }
 
     @Override
-    public SessionResponse loginSession(String userId, String password) {
+    public TicketResponse loginSession(String userId, String password) {
         ResponseCode authResult = authenticator.authenticateUser(userId, password);
-        Session session = null;
+        Ticket ticket = null;
         if (authResult == ResponseCode.OK) {
-            session = issueToken(userId);
+            ticket = issueToken(userId);
         }
-        return new SessionResponse(authResult, session);
+        return new TicketResponse(authResult, ticket);
     }
 
     /**
@@ -42,26 +42,26 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
      * @return Token
      */
     @Override
-    public SessionResponse loginSingleUse(String userId, String password) {
+    public TicketResponse loginSingleUse(String userId, String password) {
         ResponseCode authResult = authenticator.authenticateUser(userId, password);
-        Session session = null;
+        Ticket ticket = null;
         if (authResult == ResponseCode.OK) {
-            session = issueToken(userId);
-            session.singleUse = true;
+            ticket = issueToken(userId);
+            ticket.singleUse = true;
         }
-        return new SessionResponse(authResult, session);
+        return new TicketResponse(authResult, ticket);
     }
 
     /**
-     * @param session - Token object to be validated by Manager
+     * @param ticket - Token object to be validated by Manager
      * @return
      */
     @Override
-    public boolean validateSession(Session session) throws RemoteException {
-        if (session == null) return false;
+    public boolean validateTicket(Ticket ticket) throws RemoteException {
+        if (ticket == null) return false;
         clearExpired();
-        boolean valid = activeSessions.containsKey(session.getId());
-        if (session.singleUse) activeSessions.remove(session.getId());
+        boolean valid = activeSessions.containsKey(ticket.getId());
+        if (ticket.singleUse) activeSessions.remove(ticket.getId());
         return valid;
     }
 
@@ -70,10 +70,10 @@ public class SessionManager extends UnicastRemoteObject implements ISessionValid
      * @param userId - String containing the username
      * @return personal generated Token
      */
-    private Session issueToken(String userId) {
-        Session newSession = new Session(userId);
-        activeSessions.put(newSession.getId(), newSession);
-        return newSession;
+    private Ticket issueToken(String userId) {
+        Ticket newTicket = new Ticket(userId);
+        activeSessions.put(newTicket.getId(), newTicket);
+        return newTicket;
     }
 
     private void clearExpired() {
