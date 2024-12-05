@@ -8,8 +8,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Logger;
 
 public class AppServer {
+    private static final Logger logger = Logger.getLogger(AppServer.class.getName());
+    
     private static final int REGISTRY_PORT = 8035;
     private static IPrinterService printer;
     private static TicketManager ticketManager;
