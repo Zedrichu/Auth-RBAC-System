@@ -66,11 +66,11 @@ public class TicketManager extends UnicastRemoteObject implements ITicketValidat
     }
 
     /**
-     * Method to issue a Token for newly-authenticated user
+     * Method to issue a session Ticket for newly-authenticated user
      * @param userId - String containing the username
      * @return personal generated Token
      */
-    private Ticket issueToken(String userId) {
+    private Ticket issueTicket(String userId) {
         Ticket newTicket = new Ticket(userId);
         activeSessions.put(newTicket.getId(), newTicket);
         return newTicket;
