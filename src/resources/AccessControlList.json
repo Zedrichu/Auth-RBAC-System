@@ -23,9 +23,9 @@
         "start": true,
         "stop": true,
         "restart": true,
-        "status": false,
-        "readConfig": false,
-        "setConfig": false
+        "status": true,
+        "readConfig": true,
+        "setConfig": true
       }
     },
     {
