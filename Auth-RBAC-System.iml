@@ -19,4 +19,9 @@
     <orderEntry type="library" name="MariaDB Connector jDBC" level="project" />
     <orderEntry type="library" name="JSONSimple" level="project" />
   </component>
+  <component name="AdditionalModuleElements">
+      <content url="file://$MODULE_DIR$" dumb="true">
+        <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
+      </content>
+    </component>
 </module>
