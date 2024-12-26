@@ -1,8 +1,23 @@
+/*
+ *     Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *
+ *     This program is free software: you can redistribute it and/or modify it under the terms
+ *     of the GNU Affero General Public License as published by the Free Software Foundation,
+ *     either version 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *     without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *     See the GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License along with
+ *     this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package client;
 
-import util.IPrinterService;
+import shared.IAuthCredential;
+import shared.IPrinterService;
 import util.InvalidAccessException;
-import util.Ticket;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -31,7 +46,7 @@ public class CLIMenu {
         return sessionMode == 1;
     }
 
-    public boolean selectOperation(IPrinterService printerService, Ticket ticket, boolean singleUse) throws RemoteException, InvalidAccessException {
+    public boolean selectOperation(IPrinterService printerService, IAuthCredential sessionTicket, boolean singleUse) throws RemoteException, InvalidAccessException {
         do {
             System.out.println("Please choose one of the following operations (enter -1 to exit)");
             System.out.println("1: print(filename, printer)");
@@ -52,46 +67,46 @@ public class CLIMenu {
                     String filename = scanner.next();
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.print(filename, printer, ticket);
+                    printerService.print(filename, printer, sessionTicket);
 
                 }
                 case 2 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.queue(printer, ticket);
+                    printerService.queue(printer, sessionTicket);
                 }
                 case 3 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
                     System.out.print("Enter the job number: ");
                     int job = scanner.nextInt();
-                    printerService.topQueue(printer, job, ticket);
+                    printerService.topQueue(printer, job, sessionTicket);
                 }
                 case 4 -> {
-                    printerService.start(ticket);
+                    printerService.start(sessionTicket);
                 }
                 case 5 -> {
-                    printerService.restart(ticket);
+                    printerService.restart(sessionTicket);
                 }
                 case 6 -> {
-                    printerService.stop(ticket);
+                    printerService.stop(sessionTicket);
                 }
                 case 7 -> {
                     System.out.print("Enter the printer name: ");
                     String printer = scanner.next();
-                    printerService.status(printer, ticket);
+                    printerService.status(printer, sessionTicket);
                 }
                 case 8 -> {
                     System.out.print("Enter the parameter name: ");
                     String parameter = scanner.next();
-                    printerService.readConfig(parameter, ticket);
+                    printerService.readConfig(parameter, sessionTicket);
                 }
                 case 9 -> {
                     System.out.print("Enter the parameter name: ");
                     String parameter = scanner.next();
                     System.out.print("Enter the value: ");
                     String value = scanner.next();
-                    printerService.setConfig(parameter, value, ticket);
+                    printerService.setConfig(parameter, value, sessionTicket);
                 }
             }
             Success("Printer operation performed successfully!");

@@ -1,8 +1,22 @@
+/*
+ *     Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *
+ *     This program is free software: you can redistribute it and/or modify it under the terms
+ *     of the GNU Affero General Public License as published by the Free Software Foundation,
+ *     either version 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *     without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *     See the GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License along with
+ *     this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package server;
 
 import org.json.simple.JSONObject;
 import server.acpolicy.AccessControlUser;
-
 import java.sql.*;
 import java.util.List;
 
@@ -37,7 +51,7 @@ public class DBManager {
     }
 
     public ResultSet queryUserCredentials(String username) throws SQLException {
-        String query = "SELECT PASSHASH, SALT FROM USERS WHERE ID = ?";
+        String query = "SELECT PASSHASH FROM USERS WHERE ID = ?";
         PreparedStatement prepStatement = connection.prepareStatement(query);
         prepStatement.setString(1, username);
         return prepStatement.executeQuery();

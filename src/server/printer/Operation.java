@@ -13,8 +13,10 @@
  *     this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package client;
+package server.printer;
 
-public interface ITask<T> {
-
+public enum PrinterOperation {
+    PRINT, QUEUE, TOPQUEUE,
+    START, RESTART, STOP,
+    STATUS, READCONFIG, SETCONFIG
 }

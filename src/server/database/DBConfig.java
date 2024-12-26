@@ -13,8 +13,10 @@
  *     this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package client;
+package server;
 
-public interface ITask<T> {
-
+public class DBConfig {
+    public static final String URL = "jdbc:h2:file:./database/db_file";
+    public static final String USER = "Group85";
+    public static final String PASSWORD = "";
 }

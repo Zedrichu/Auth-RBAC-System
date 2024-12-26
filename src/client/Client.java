@@ -1,6 +1,22 @@
+/*
+ *     Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *
+ *     This program is free software: you can redistribute it and/or modify it under the terms
+ *     of the GNU Affero General Public License as published by the Free Software Foundation,
+ *     either version 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *     without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *     See the GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License along with
+ *     this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package client;
 
-import util.*;
+import shared.*;
+import util.InvalidAccessException;
+import util.ResponseCode;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -22,23 +38,22 @@ public class Client {
         try {
             IPrinterService printerService = (IPrinterService) Naming.lookup(
                     "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + IPrinterService.routeName);
-            ITicketProvider tokenProvider = (ITicketProvider) Naming.lookup(
-                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ITicketProvider.routeName);
+            ICredentialProvider tokenProvider = (ICredentialProvider) Naming.lookup(
+                    "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ICredentialProvider.routeName);
             menu = new CLIMenu();
-
             while (true) {
                 User user = menu.createUser();
                 boolean useSingleUse = menu.selectSessionMode();
-                TicketResponse response;
+                CredentialResponse response;
                 if (useSingleUse) response = tokenProvider.loginSingleUse(user.username, user.password);
                 else response = tokenProvider.loginSession(user.username, user.password);
 
                 if (handleResponse(response)) {
-                    System.out.println(YELLOW + "Client |" + response.ticket.username
-                            + "| has access to session id: |" + response.ticket.getId() + "|" + RESET);
+                    System.out.println(YELLOW + "Client |" + response.credential.getUsername()
+                            + "| has access to session token: |" + response.credential.getPayload() + "|" + RESET);
                     try {
                         // Returns false if user exited
-                        if (!menu.selectOperation(printerService, response.ticket, useSingleUse)) {
+                        if (!menu.selectOperation(printerService, response.credential, useSingleUse)) {
                             break;
                         }
                     } catch (InvalidAccessException iaex) {
@@ -55,7 +70,7 @@ public class Client {
         }
     }
 
-    private static boolean handleResponse(TicketResponse response){
+    private static boolean handleResponse(CredentialResponse response){
         ResponseCode rc = response.responseCode;
         if (rc == ResponseCode.OK) {
             System.out.println(GREEN + "Session has been provided for single use on printer" + RESET);
