@@ -169,126 +169,27 @@
     <schema id="162" parent="2" name="INFORMATION_SCHEMA"/>
     <schema id="163" parent="2" name="PUBLIC">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-12-26.16:13:16</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-12-26.22:15:23</LastIntrospectionLocalTimestamp>
     </schema>
     <user id="164" parent="2" name="GROUP85">
       <Admin>1</Admin>
     </user>
-    <table id="165" parent="163" name="RBAC_USERS"/>
-    <table id="166" parent="163" name="ROLES"/>
-    <table id="167" parent="163" name="USERS"/>
-    <column id="168" parent="165" name="USERNAME">
+    <table id="165" parent="163" name="USERS"/>
+    <column id="166" parent="165" name="ID">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>CHARACTER VARYING(256)|0s</StoredType>
     </column>
-    <column id="169" parent="165" name="ROLE">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>CHARACTER VARYING(256)|0s</StoredType>
-    </column>
-    <foreign-key id="170" parent="165" name="CONSTRAINT_58">
-      <ColNames>USERNAME</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <OnDelete>restrict</OnDelete>
-      <OnUpdate>restrict</OnUpdate>
-      <RefKeyName>CONSTRAINT_4D</RefKeyName>
-      <RefTableName>USERS</RefTableName>
-    </foreign-key>
-    <foreign-key id="171" parent="165" name="CONSTRAINT_588">
-      <ColNames>ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <OnDelete>restrict</OnDelete>
-      <OnUpdate>restrict</OnUpdate>
-      <RefKeyName>CONSTRAINT_4</RefKeyName>
-      <RefTableName>ROLES</RefTableName>
-    </foreign-key>
-    <index id="172" parent="165" name="PRIMARY_KEY_5">
-      <ColNames>USERNAME
-ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <index id="173" parent="165" name="CONSTRAINT_INDEX_5">
-      <ColNames>USERNAME</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-    </index>
-    <index id="174" parent="165" name="CONSTRAINT_INDEX_58">
-      <ColNames>ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-    </index>
-    <key id="175" parent="165" name="CONSTRAINT_5">
-      <ColNames>USERNAME
-ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-    </key>
-    <column id="176" parent="166" name="ROLE">
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>CHARACTER VARYING(256)|0s</StoredType>
-    </column>
-    <column id="177" parent="166" name="PRINT">
-      <Position>2</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="178" parent="166" name="QUEUE">
-      <Position>3</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="179" parent="166" name="TOPQUEUE">
-      <Position>4</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="180" parent="166" name="START">
-      <Position>5</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="181" parent="166" name="RESTART">
-      <Position>6</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="182" parent="166" name="STOP">
-      <Position>7</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="183" parent="166" name="STATUS">
-      <Position>8</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="184" parent="166" name="READCONFIG">
-      <Position>9</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <column id="185" parent="166" name="SETCONFIG">
-      <Position>10</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
-    </column>
-    <index id="186" parent="166" name="PRIMARY_KEY_4">
-      <ColNames>ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="187" parent="166" name="CONSTRAINT_4">
-      <ColNames>ROLE</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-    </key>
-    <column id="188" parent="167" name="ID">
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>CHARACTER VARYING(256)|0s</StoredType>
-    </column>
-    <column id="189" parent="167" name="PASSHASH">
+    <column id="167" parent="165" name="PASSHASH">
       <Position>2</Position>
       <StoredType>CHARACTER VARYING(128)|0s</StoredType>
     </column>
-    <index id="190" parent="167" name="PRIMARY_KEY_4D">
+    <index id="168" parent="165" name="PRIMARY_KEY_4">
       <ColNames>ID</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="191" parent="167" name="CONSTRAINT_4D">
+    <key id="169" parent="165" name="CONSTRAINT_4">
       <ColNames>ID</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
