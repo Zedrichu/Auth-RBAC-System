@@ -1,12 +1,26 @@
+/*
+ *   Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *
+ *       This program is free software: you can redistribute it and/or modify it under the terms
+ *       of the GNU Affero General Public License as published by the Free Software Foundation,
+ *       either version 3 of the License, or (at your option) any later version.
+ *
+ *       This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *       without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *       See the GNU Affero General Public License for more details.
+ *
+ *       You should have received a copy of the GNU Affero General Public License along with
+ *       this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package server.acpolicy;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import server.DBManager;
-import server.Operation;
-import server.Roles;
+import server.database.DBManager;
+import server.printer.Operation;
 import util.InvalidAccessException;
 
 import java.io.FileReader;
@@ -30,7 +44,7 @@ public class RBACController implements IAccessController {
         try {
             if (!dbManager.queryRBACUserAccess(username, operation)) {
                 throw new InvalidAccessException(
-                        String.format("User %s does not have a valid role to perform %s", username, operation));
+                        String.format("User %s does not have a role authorized to perform %s", username, operation));
             }
             return true;
         }

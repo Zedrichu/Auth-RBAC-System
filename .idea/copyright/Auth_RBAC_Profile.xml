@@ -1,0 +1,6 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="  Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti&#10;&#10;      This program is free software: you can redistribute it and/or modify it under the terms&#10;      of the GNU Affero General Public License as published by the Free Software Foundation,&#10;      either version 3 of the License, or (at your option) any later version.&#10; &#10;      This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;&#10;      without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;      See the GNU Affero General Public License for more details.&#10; &#10;      You should have received a copy of the GNU Affero General Public License along with&#10;      this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;." />
+    <option name="myName" value="Auth-RBAC-Profile" />
+  </copyright>
+</component>

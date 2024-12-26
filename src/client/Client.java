@@ -1,16 +1,16 @@
 /*
- *     Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *   Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
  *
- *     This program is free software: you can redistribute it and/or modify it under the terms
- *     of the GNU Affero General Public License as published by the Free Software Foundation,
- *     either version 3 of the License, or (at your option) any later version.
+ *       This program is free software: you can redistribute it and/or modify it under the terms
+ *       of the GNU Affero General Public License as published by the Free Software Foundation,
+ *       either version 3 of the License, or (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- *     without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *     See the GNU Affero General Public License for more details.
+ *       This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *       without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *       See the GNU Affero General Public License for more details.
  *
- *     You should have received a copy of the GNU Affero General Public License along with
- *     this program.  If not, see <https://www.gnu.org/licenses/>.
+ *       You should have received a copy of the GNU Affero General Public License along with
+ *       this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package client;
 
@@ -40,6 +40,7 @@ public class Client {
                     "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + IPrinterService.routeName);
             ICredentialProvider tokenProvider = (ICredentialProvider) Naming.lookup(
                     "rmi://" + REGISTRY_HOST +":" + REGISTRY_PORT +"/" + ICredentialProvider.routeName);
+
             menu = new CLIMenu();
             while (true) {
                 User user = menu.createUser();
@@ -60,7 +61,7 @@ public class Client {
                         System.out.println(RED + "INVALID ACCESS:" + iaex.getMessage() + RESET);
                     }
                 } else {
-                    System.out.println(RED + "Session could not be provided!" + RESET);
+                    System.out.println(RED + "Authenticated session could not be provided!" + RESET);
                 }
             }
         } catch (RemoteException rex) {

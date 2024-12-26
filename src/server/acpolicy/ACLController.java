@@ -1,13 +1,31 @@
+/*
+ *   Copyright (C) 2023 Adrian Zvizdenco, Jeppe Mikkelsen, Arthur Bosquetti
+ *
+ *       This program is free software: you can redistribute it and/or modify it under the terms
+ *       of the GNU Affero General Public License as published by the Free Software Foundation,
+ *       either version 3 of the License, or (at your option) any later version.
+ *
+ *       This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *       without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *       See the GNU Affero General Public License for more details.
+ *
+ *       You should have received a copy of the GNU Affero General Public License along with
+ *       this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package server.acpolicy;
 
-import java.io.*;
-import java.sql.SQLException;
-
-import org.json.simple.*;
-import org.json.simple.parser.*;
-import server.DBManager;
-import server.Operation;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import server.database.DBManager;
+import server.printer.Operation;
 import util.InvalidAccessException;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class ACLController implements IAccessController{
     private final DBManager dbManager;

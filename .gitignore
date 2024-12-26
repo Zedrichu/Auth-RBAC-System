@@ -2,7 +2,23 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-.idea/**.xml
+
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+# Sensitive or high-churn files:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+### GRADLE ###
 .idea/libraries
 
 ### Eclipse ###
@@ -31,4 +47,4 @@ bin/
 .DS_Store
 
 ### Others ###
-database/db_file.trace.db
+data/db_file.trace.db
